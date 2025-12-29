@@ -20,6 +20,9 @@ enum struct EntityType
 	ENEMY_PROJECTILE
 };
 
+/* TODO: Maybe fold into player struct
+*/
+
 struct PlayerData
 {
 	std::string name;
@@ -70,6 +73,9 @@ public:
 	void Render(Texture2D texture);
 };
 
+/* TODO: Make constructor and initialize variables there
+*/
+
 struct Wall 
 {
 public: 
@@ -84,6 +90,9 @@ public:
 	void Render(Texture2D texture); 
 	void Update(); 
 };
+
+/* TODO: Make constructor
+*/
 
 struct Alien
 {
@@ -105,6 +114,8 @@ public:
 	void Render(Texture2D texture); 
 };
 
+/* TODO: Make constructor
+*/
 
 struct Star
 {
@@ -115,6 +126,11 @@ struct Star
 	void Update(float starOffset);
 	void Render();
 };
+
+/* TODO: Make constructor
+*  Initialize in constructorm, not in separate function or 
+	make initialize part of construction depending on how it looks
+*/
 
 struct Background
 {
@@ -127,6 +143,13 @@ struct Background
 	void Render();
 
 };
+
+/* TODO: Make constructor
+* Make resources a class thats raii approved
+* Maybe make leaderboard into a struct or class
+* Maybe make textbox into struct or class aswell and change char into string or string_view
+* Maybe look into making some of the functions free functions
+*/
 
 struct Game
 {

@@ -1,6 +1,9 @@
 #include "Resources.h"
 #include <iostream>;
 
+/* Todo: Initialize in constructor, check if multiple ship textures are used
+* Check how the textures are unloaded and add to destructor
+*/
 void Resources::Load()
 {
 	std::cout << "Yay"; // yes

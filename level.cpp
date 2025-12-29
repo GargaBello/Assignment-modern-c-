@@ -4,6 +4,11 @@
 #include <string>
 #include "level.h"
 
+/* TODO: Move to raii class construction
+* Construct an entity instead of two step initialisation when reading from file
+* Remove the message that says that entities spawn att location and replace with a proper error handling check if needed
+*/
+
 void LoadLevelFromFile(const std::string& filename) 
 {
 	std::ifstream file(filename); 

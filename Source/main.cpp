@@ -24,7 +24,10 @@
 #include "raylib.h"
 #include "game.h"
 
-
+/* TODO: Make init window and audio device raii classes 
+* Maybe move draw logic into game update, make a draw functtion in game
+* Check if sound is used, remove if not or make work
+*/
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------

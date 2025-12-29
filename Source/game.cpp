@@ -5,6 +5,9 @@
 #include <thread>
 #include <fstream>
 
+/* Todo: Check if functions are used and maybe replace if not really needed
+* Otherwise use algorithms to make more modern
+*/
 
 // MATH FUNCTIONS
 float lineLength(Vector2 A, Vector2 B) //Uses pythagoras to calculate the length of a line
@@ -28,7 +31,10 @@ bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pytha
 	}
 }
 
-
+/* TODO: Make into construction, make all initialisations inside constructions aswell
+* Change the starting of the game as needed to compensate
+* Make for loops into an algo or ranged for loops
+*/
 void Game::Start()
 {
 	// creating walls 
@@ -67,6 +73,9 @@ void Game::Start()
 
 }
 
+/* TODO: maybe make into destructor
+*/
+
 void Game::End()
 {
 	//SAVE SCORE AND UPDATE SCOREBOARD
@@ -83,11 +92,24 @@ void Game::Continue()
 	gameState = State::STARTSCREEN;
 }
 
+/* TODO: Choose between loading resources at program start and unloading them when it ends 
+or only load them during the game
+*/
 void Game::Launch()
 {
 	//LOAD SOME RESOURCES HERE
 	resources.Load();
 }
+
+/* TODO: Change iskeyreleased to iskeypressed
+* Signal that q ends the game or make it escape
+* Change all for loop to ranged for loop
+* Invert the collision checking or make it less nested
+* Maybe make the collision check a template free function that can check both types of projectiles
+* Make projectile creation a construction instead of two step initialisation
+* Look into the erasing of entities and see if there is a better way
+* Probly change the way the name in the highscore is put in and especially make it string or string_view
+*/
 
 void Game::Update()
 {
@@ -345,6 +367,10 @@ void Game::Update()
 	}
 }
 
+/* TODO: Move the draw functions built into raylib here
+* Make for loop into ranged for loop
+* Probably change something with the textbox in leaderboard, ill get to it eventually
+*/
 
 void Game::Render()
 {
@@ -482,6 +508,9 @@ void Game::Render()
 	}
 }
 
+/* TODO: Make for loops into ranged for loops
+* Make alien an construction
+*/
 void Game::SpawnAliens()
 {
 	for (int row = 0; row < formationHeight; row++) {
@@ -508,6 +537,9 @@ bool Game::CheckNewHighScore()
 	return false;
 }
 
+/* TODO: Make playerdata an construction
+* Make for loop ranged for loop
+*/
 void Game::InsertNewHighScore(std::string name)
 {
 	PlayerData newData;
@@ -529,6 +561,8 @@ void Game::InsertNewHighScore(std::string name)
 	}
 }
 
+/* TODO: Maybe make functional
+*/
 void Game::LoadLeaderboard()
 {
 	// CLEAR LEADERBOARD
@@ -568,6 +602,8 @@ void Game::SaveLeaderboard()
 }
 
 
+/* TODO: Might be a costly way to check collisions that might be easier to do in different way
+*/
 bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)
 {
 	// our objective is to calculate the distance between the closest point on the line to the centre of the circle, 
@@ -633,6 +669,9 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 
 }
 
+/* TODO: Seems useless, delete
+*/
+
 void Player::Initialize() 
 {
 	
@@ -642,6 +681,9 @@ void Player::Initialize()
 
 }
 
+/* TODO: Probably possible to simplify the movement further
+* Look into if the timer stuff does anything and either make it work or delete
+*/
 void Player::Update() 
 {
 
@@ -685,6 +727,9 @@ void Player::Update()
 	
 }
 
+/* TODO: Make rectangles for the texture drawing
+* Make const and probably noexcept as the texture error handling should be done during construction
+*/
 void Player::Render(Texture2D texture) 
 {
 	float window_height = GetScreenHeight(); 
@@ -724,6 +769,10 @@ void Projectile::Update()
 	}
 }
 
+/* TODO: Make rectangles here aswell
+* Make const and probably noexcept because the texture error handling should be done during construction
+*/
+
 void Projectile::Render(Texture2D texture)
 {
 	//DrawCircle((int)position.x, (int)position.y, 10, RED);
@@ -743,6 +792,10 @@ void Projectile::Render(Texture2D texture)
 		0,
 		WHITE);
 }
+
+/* TODO: Make rectangles here aswell
+* Make const and probably noexcept because the texture error handling should be done during construction
+*/
 
 void Wall::Render(Texture2D texture)
 {
@@ -779,6 +832,10 @@ void Wall::Update()
 
 }
 
+/* TODO: can probably be simplified with speed merely becoming minus or plus depending on if they hit the wall
+* 
+*/
+
 void Alien::Update() 
 {
 	int window_width = GetScreenWidth(); 
@@ -804,6 +861,10 @@ void Alien::Update()
 		}
 	}
 }
+
+/* TODO: Make rectangles here aswell
+* Make const and probably noexcept because the texture error handling should be done during construction
+*/
 
 void Alien::Render(Texture2D texture) 
 {
@@ -838,12 +899,18 @@ void Star::Update(float starOffset)
 
 }
 
+/* TODO: Make rectangles here aswell
+* Make const and probably noexcept because the texture error handling should be done during construction
+*/
+
 void Star::Render()
 {
 	DrawCircle((int)position.x, (int)position.y, size, color);
 }
 
-
+/* TODO: construct instead of initialization
+* Make a func in the game construction
+*/
 void Background::Initialize(int starAmount)
 {
 	for (int i = 0; i < starAmount; i++)
@@ -863,6 +930,10 @@ void Background::Initialize(int starAmount)
 	}
 }
 
+/* TODO: Make for loop ranged for
+* Maybe make const or noexcept
+*/
+
 void Background::Update(float offset)
 {
 	for (int i = 0; i < Stars.size(); i++)
@@ -871,6 +942,10 @@ void Background::Update(float offset)
 	}
 	
 }
+
+/* TODO: Make const and noexcept
+* Make for loop ranged for loop
+*/
 
 void Background::Render()
 {
@@ -894,7 +969,8 @@ void Background::Render()
 
 
 
-
+/* TODO: Remove
+*/
 
 /*LEGACY CODE
 	// our objective is to calculate the distance between the closest point of the line to the centre of the circle,

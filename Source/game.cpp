@@ -668,17 +668,7 @@ bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineSta
 
 }
 
-/* TODO: Seems useless, delete
-*/
 
-void Player::Initialize() 
-{
-	
-	float window_width = (float)GetScreenWidth();
-	x_pos = window_width / 2;
-	std::cout<< "Find Player -X:" << GetScreenWidth() / 2 << "Find Player -Y" << GetScreenHeight() - player_base_height << std::endl;
-
-}
 
 Player::Player() noexcept
 	: x_pos(static_cast<float>(GetScreenWidth()) / 2)
@@ -966,63 +956,4 @@ void Background::Render()
 		Stars[i].Render();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* TODO: Remove
-*/
-
-/*LEGACY CODE
-	// our objective is to calculate the distance between the closest point of the line to the centre of the circle,
-	// and determine if it is shorter than the radius.
-
-	// we can imagine the edges of the line and circle centre to form a triangle. calculating the height of the
-	// triangle will give us the distance, if the line serves as the base
-
-	// simplify variables
-	Vector2 A = lineStart;
-	Vector2 B = lineEnd;
-	Vector2 C = circlePos;
-
-	// calculate area using determinant method
-
-	float triangle_area = fabsf(A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2;
-
-
-	// Caculate vectors AB to calculate base length
-	Vector2 AB;
-	AB.x = B.x - A.x;
-	AB.y = B.y - A.y;
-
-	//get the base length
-	float trangle_base_length = (float)sqrt(pow(AB.x, 2) + pow(AB.y, 2));
-
-	// we double the area to turn in into a rectangle, and then divide the base length to get the height.
-	float triangle_height = (triangle_area * 2 ) / trangle_base_length;
-
-	std::cout << triangle_area << "\n";
-
-	if (triangle_height < circleRadius)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-
-
-	*/
 

@@ -34,18 +34,30 @@ struct PlayerData
 */
 struct Player
 {
-public:
+	float x_pos				 = 0;
+	float speed				 = 0;
+	float player_base_height = 0;
+	float radius			 = 0;
+	float timer				 = 0;
+	int lives				 = 0;
+	int direction			 = 0;
+	int activeTexture		 = 0;
 
-	float x_pos = 0;
+
+	EntityType type = EntityType::PLAYER;
+
+	Player() noexcept;
+
+	/*float x_pos = 0;
 	float speed = 7;
 	float player_base_height = 70.0f;  
 	float radius = 50;
 	int lives = 3;
 	int direction = 0;
 	int activeTexture = 0;
-	float timer = 0;
+	float timer = 0;*/
 
-	EntityType type = EntityType::PLAYER;
+	//EntityType type = EntityType::PLAYER;
 
 	void Initialize();
 	void Render(Texture2D texture);

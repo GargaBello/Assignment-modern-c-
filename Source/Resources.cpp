@@ -22,6 +22,10 @@ void Resources::Unload()
 }
 */
 
+/* TODO: Maybe make error handling a free function performed after construction or 
+make constructor take a argument to not make it a default constructor
+*/
+
 ShipTexture::ShipTexture()
 {
 	shipTextures.push_back(LoadTexture("./Assets/Ship1.png"));
@@ -32,7 +36,7 @@ ShipTexture::ShipTexture()
 	for (auto& texture : shipTextures) {
 		++posInVec;
 		if (texture.id == 0) {
-			throw std::runtime_error("Failed to load texture: ShipTexture" + posInVec);
+			throw std::runtime_error("Failed to load texture: ShipTexture" + std::to_string(posInVec));
 		}
 	}
 }

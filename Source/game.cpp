@@ -12,7 +12,7 @@
 // MATH FUNCTIONS
 float lineLength(Vector2 A, Vector2 B) //Uses pythagoras to calculate the length of a line
 {
-	float length = sqrtf(pow(B.x - A.x, 2) + pow(B.y - A.y, 2));
+	const float length = sqrtf(pow(B.x - A.x, 2) + pow(B.y - A.y, 2));
 
 	return length;
 }
@@ -52,10 +52,9 @@ void Game::Start()
 	}
 
 
-	//creating player
-	Player newPlayer;
-	player = newPlayer;
-	player.Initialize();
+	/* TODO: Find better solution to resetting player attributes when game is restarted without game struct being reconstructed
+	*/
+	player.lives = 3;
 
 	//creating aliens
 	SpawnAliens();
@@ -679,6 +678,19 @@ void Player::Initialize()
 	x_pos = window_width / 2;
 	std::cout<< "Find Player -X:" << GetScreenWidth() / 2 << "Find Player -Y" << GetScreenHeight() - player_base_height << std::endl;
 
+}
+
+Player::Player() noexcept
+	: x_pos(static_cast<float>(GetScreenWidth()) / 2)
+	, speed(7)
+	, player_base_height(70.0f)
+	, radius(50.0f)
+	, lives(3)
+	, direction(0)
+	, activeTexture(0)
+	, timer(0)
+	, type(EntityType::PLAYER)
+{
 }
 
 /* TODO: Probably possible to simplify the movement further

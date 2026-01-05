@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include <vector>
 #include <string_view>
+#include <string>
 #include <iostream>
 #include <exception>
 #include <ranges>

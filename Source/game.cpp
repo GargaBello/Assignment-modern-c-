@@ -799,6 +799,16 @@ void Projectile::Render(Texture2D texture)
 * Make const and probably noexcept because the texture error handling should be done during construction
 */
 
+//Wall::Wall(Game game)
+//	: position({ static_cast<float>(GetScreenWidth) / game.wall_count + 1, static_cast<float>(GetScreenHeight() - 250)})
+//{
+//	Wall newWalls;
+//	newWalls.position.y = static_cast<float>(GetWindow) - 250;
+//	newWalls.position.x = wall_distance * (i + 1);
+//};
+
+
+
 void Wall::Render(Texture2D texture)
 {
 	DrawTexturePro(texture,

@@ -57,7 +57,6 @@ struct Player
 */
 struct Projectile
 {
-public: 
 	// INITIALIZE PROJECTILE WHILE DEFINING IF ITS PLAYER OR ENEMY 
 	Vector2 position = {0,0};
 	int speed = 15; 
@@ -78,14 +77,15 @@ public:
 
 struct Wall 
 {
-public: 
-	Vector2 position; 
-	Rectangle rec; 
+	Vector2 position;
+	Rectangle rec;
 	bool active; 
-	Color color; 
+	Color color;
 	int health = 50;
 	int radius = 60;
 
+	
+	Wall();
 
 	void Render(Texture2D texture); 
 	void Update(); 

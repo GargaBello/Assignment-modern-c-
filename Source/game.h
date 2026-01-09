@@ -116,7 +116,8 @@ public:
 	
 	EntityType type = EntityType::ENEMY; 
 
-	int speed = 2; 
+	int speed = 2; //2
+
 		 
 	void Update(); 
 	void Render(Texture2D texture); 
@@ -129,8 +130,11 @@ struct Star
 {
 	Vector2 initPosition = { 0, 0 };
 	Vector2 position = { 0, 0 };
-	Color color = GRAY;
+	Color color = SKYBLUE;
 	float size = 0;
+
+	Star(Vector2 pos, float size);
+
 	void Update(float starOffset);
 	void Render();
 };
@@ -142,11 +146,10 @@ struct Star
 
 struct Background
 {
-	
+	std::vector<Star> Stars{};
 
-	std::vector<Star> Stars;
+	Background(int starAmount);
 
-	void Initialize(int starAmount);
 	void Update(float offset);
 	void Render();
 
@@ -219,7 +222,7 @@ struct Game
 
 	std::vector<PlayerData> Leaderboard = { {"Player 1", 500}, {"Player 2", 400}, {"Player 3", 300}, {"Player 4", 200}, {"Player 5", 100} };
 	
-	Background background;
+	Background background = Background(600);
 
 
 

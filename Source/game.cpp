@@ -37,20 +37,6 @@ bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pytha
 */
 void Game::Start()
 {
-	// creating walls 
-	float window_width = (float)GetScreenWidth(); 
-	float window_height = (float)GetScreenHeight(); 
-	float wall_distance = window_width / (wallCount + 1); 
-	for (int i = 0; i < wallCount; i++)
-	{
-		Wall newWalls;
-		newWalls.position.y = window_height - 250; 
-		newWalls.position.x = wall_distance * (i + 1); 
-
-		Walls.push_back(newWalls); 
-
-	}
-
 
 	/* TODO: Find better solution to resetting player attributes when game is restarted without game struct being reconstructed
 	*/
@@ -79,7 +65,7 @@ void Game::End()
 {
 	//SAVE SCORE AND UPDATE SCOREBOARD
 	Projectiles.clear();
-	Walls.clear();
+	walls.walls_vec.clear();
 	Aliens.clear();
 	newHighScore = CheckNewHighScore();
 	gameState = State::ENDSCREEN;
@@ -171,9 +157,9 @@ void Game::Update()
 			Projectiles[i].Update();
 		}
 		//UPDATE PROJECTILE
-		for (int i = 0; i < Walls.size(); i++)
+		for (int i = 0; i < walls.walls_vec.size(); i++)
 		{
-			Walls[i].Update();
+			walls.walls_vec[i].Update();
 		}
 
 		//CHECK ALL COLLISONS HERE
@@ -210,15 +196,15 @@ void Game::Update()
 			}
 
 
-			for (int b = 0; b < Walls.size(); b++)
+			for (int b = 0; b < walls.walls_vec.size(); b++)
 			{
-				if (CheckCollision(Walls[b].position, Walls[b].radius, Projectiles[i].lineStart, Projectiles[i].lineEnd))
+				if (CheckCollision(walls.walls_vec[b].position, walls.walls_vec[b].radius, Projectiles[i].lineStart, Projectiles[i].lineEnd))
 				{
 					// Kill!
 					std::cout << "Hit! \n";
 					// Set them as inactive, will be killed later
 					Projectiles[i].active = false;
-					Walls[b].health -= 1;
+					walls.walls_vec[b].health -= 1;
 				}
 			}
 		}
@@ -273,11 +259,11 @@ void Game::Update()
 				i--;
 			}
 		}
-		for (int i = 0; i < Walls.size(); i++)
+		for (int i = 0; i < walls.walls_vec.size(); i++)
 		{
-			if (Walls[i].active == false)
+			if (walls.walls_vec[i].active == false)
 			{
-				Walls.erase(Walls.begin() + i);
+				walls.walls_vec.erase(walls.walls_vec.begin() + i);
 				i--;
 			}
 		}
@@ -404,9 +390,9 @@ void Game::Render()
 		}
 
 		// wall rendering 
-		for (int i = 0; i < Walls.size(); i++)
+		for (int i = 0; i < walls.walls_vec.size(); i++)
 		{
-			Walls[i].Render(resources.barrierTexture); 
+			walls.walls_vec[i].Render(resources.barrierTexture);
 		}
 
 		//alien rendering  
@@ -799,15 +785,30 @@ void Projectile::Render(Texture2D texture)
 * Make const and probably noexcept because the texture error handling should be done during construction
 */
 
-//Wall::Wall(Game game)
-//	: position({ static_cast<float>(GetScreenWidth) / game.wall_count + 1, static_cast<float>(GetScreenHeight() - 250)})
-//{
-//	Wall newWalls;
-//	newWalls.position.y = static_cast<float>(GetWindow) - 250;
-//	newWalls.position.x = wall_distance * (i + 1);
-//};
 
 
+Walls::Walls(int wallCount) noexcept
+	: wallCount(wallCount)
+	, wall_y_offset(250)
+{
+	const float window_width = static_cast<float>(GetScreenWidth());
+	const float window_height = static_cast<float>(GetScreenHeight());
+	const float wall_distance = window_width / (wallCount + 1);
+
+	for (const int i : std::views::iota(0, wallCount)) {
+		const Wall new_wall(wall_distance * (i + 1), window_height - wall_y_offset);
+		walls_vec.push_back(new_wall);
+	}
+}
+
+Wall::Wall(float x, float y) noexcept
+	: health(50)
+	, radius(60)
+	, active(true)
+	, position({ x,y })
+{
+
+}
 
 void Wall::Render(Texture2D texture)
 {

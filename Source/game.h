@@ -3,6 +3,8 @@
 #include <vector>
 #include "Resources.h"
 #include <string>
+#include <ranges>
+#include <algorithm>
 
 
 enum struct State
@@ -77,20 +79,26 @@ struct Projectile
 
 struct Wall 
 {
-	Vector2 position;
-	Rectangle rec;
-	bool active; 
-	Color color;
-	int health = 50;
-	int radius = 60;
-
+	Vector2 position{};
+	bool active = false; 
+	int health = 0; 
+	int radius = 0; 
 	
-	Wall();
+	Wall(float x, float y) noexcept;
 
 	void Render(Texture2D texture); 
 	void Update(); 
 };
 
+
+struct Walls
+{
+	const int wallCount = 0;
+	const float wall_y_offset = 0; 
+	std::vector<Wall> walls_vec{};
+
+	Walls(int wallCount) noexcept;
+};
 /* TODO: Make constructor
 */
 
@@ -205,7 +213,7 @@ struct Game
 
 	std::vector<Projectile> Projectiles;
 
-	std::vector<Wall> Walls;
+	Walls walls = Walls(wallCount);
 
 	std::vector<Alien> Aliens;
 

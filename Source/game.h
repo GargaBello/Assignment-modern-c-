@@ -60,14 +60,16 @@ struct Player
 struct Projectile
 {
 	// INITIALIZE PROJECTILE WHILE DEFINING IF ITS PLAYER OR ENEMY 
-	Vector2 position = {0,0};
-	int speed = 15; 
+	Vector2 position{};
+	int speed = 0; // 15 if player 
 	bool active = true;  
 	EntityType type = {};
 
 	// LINE WILL UPDATE WITH POSITION FOR CALCULATIONS
-	Vector2 lineStart = { 0, 0 };
-	Vector2 lineEnd = { 0, 0 };
+	Vector2 lineStart{};
+	Vector2 lineEnd{};
+
+	Projectile(Vector2 pos, EntityType type, int speed);
 
 	void Update();
 

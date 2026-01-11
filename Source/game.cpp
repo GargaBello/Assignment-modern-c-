@@ -206,11 +206,9 @@ void Game::Update()
 		//MAKE PROJECTILE
 		if (IsKeyPressed(KEY_SPACE))
 		{
-			float window_height = (float)GetScreenHeight();
-			Projectile newProjectile;
-			newProjectile.position.x = player.x_pos;
-			newProjectile.position.y = window_height - 130;
-			newProjectile.type = EntityType::PLAYER_PROJECTILE;
+			const float window_height = static_cast<float>(GetScreenHeight());
+			const Vector2 projPos = { player.x_pos, window_height - 130};
+			const Projectile newProjectile(projPos, EntityType::PLAYER_PROJECTILE, 15);
 			Projectiles.push_back(newProjectile);
 		}
 
@@ -218,6 +216,8 @@ void Game::Update()
 		shootTimer += 1;
 		if (shootTimer > 59) //once per second
 		{
+			//TODO: Refactor random system
+
 			int randomAlienIndex = 0;
 
 			if (Aliens.size() > 1)
@@ -225,11 +225,9 @@ void Game::Update()
 				randomAlienIndex = rand() % Aliens.size();
 			}
 
-			Projectile newProjectile;
-			newProjectile.position = Aliens[randomAlienIndex].position;
-			newProjectile.position.y += 40;
-			newProjectile.speed = -15;
-			newProjectile.type = EntityType::ENEMY_PROJECTILE;
+			Vector2 projPos = { Aliens[randomAlienIndex].position};
+			projPos.y += 40;
+			const Projectile newProjectile(projPos, EntityType::ENEMY_PROJECTILE, -15);
 			Projectiles.push_back(newProjectile);
 			shootTimer = 0;
 		}
@@ -729,6 +727,14 @@ void Player::Render(Texture2D texture)
 }
 
 
+
+Projectile::Projectile(Vector2 pos, EntityType type, int speed)
+	: position(pos)
+	, active(true)
+	, speed(speed)
+	, type(type)
+{
+}
 
 void Projectile::Update()
 {

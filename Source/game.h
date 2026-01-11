@@ -107,17 +107,18 @@ struct Alien
 public:
 	
 	Color color = WHITE; 
-	Vector2 position = {0, 0};
+	Vector2 position{};
 	int x = 0; 
 	int y = 0; 
-	float radius = 30;
+	float radius = 0; // 30
 	bool active = true;  
 	bool moveRight = true; 
 	
 	EntityType type = EntityType::ENEMY; 
 
-	int speed = 2; //2
+	int speed = 0; //2
 
+	Alien(Vector2 pos);
 		 
 	void Update(); 
 	void Render(Texture2D texture); 

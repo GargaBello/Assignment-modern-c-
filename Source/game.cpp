@@ -492,15 +492,11 @@ void Game::Render()
 */
 void Game::SpawnAliens()
 {
-	for (int row = 0; row < formationHeight; row++) {
-		for (int col = 0; col < formationWidth; col++) {
-			Alien newAlien = Alien();
-			newAlien.active = true;
-			newAlien.position.x = formationX + 450 + (col * alienSpacing);
-			newAlien.position.y = formationY + (row * alienSpacing);
+	for (const int& row : std::views::iota(0, formationHeight)) {
+		for (const int& col : std::views::iota(0, formationHeight)) {
+			const Vector2 alienPos = { formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) };
+			const Alien newAlien(alienPos);
 			Aliens.push_back(newAlien);
-			std::cout << "Find Alien -X:" << newAlien.position.x << std::endl;
-			std::cout << "Find Alien -Y:" << newAlien.position.y << std::endl;
 		}
 	}
 
@@ -843,7 +839,17 @@ void Wall::Update()
 * 
 */
 
-void Alien::Update() 
+Alien::Alien(Vector2 pos) 
+	: position(pos)
+	, radius(30)
+	, active(true)
+	, moveRight(true)
+	, type(EntityType::ENEMY)
+	, speed(2)
+{
+}
+
+void Alien::Update()
 {
 	int window_width = GetScreenWidth(); 
 

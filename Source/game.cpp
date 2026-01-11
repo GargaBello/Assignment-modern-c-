@@ -99,8 +99,6 @@ void Game::Update()
 		if (IsKeyReleased(KEY_SPACE))
 		{
 			Start();
-
-
 		}
 
 		break;
@@ -115,11 +113,11 @@ void Game::Update()
 		player.Update();
 		
 		//Update Aliens and Check if they are past player
-		for (int i = 0; i < Aliens.size(); i++)
+		for (auto& alien : Aliens)
 		{
-			Aliens[i].Update(); 
+			alien.Update(); 
 
-			if (Aliens[i].position.y > GetScreenHeight() - player.player_base_height)
+			if (alien.position.y > GetScreenHeight() - player.player_base_height)
 			{
 				End();
 			}
@@ -139,66 +137,66 @@ void Game::Update()
 
 
 		// Update background with offset
-		playerPos = { player.x_pos, (float)player.player_base_height };
-		cornerPos = { 0, (float)player.player_base_height };
+		playerPos = { player.x_pos, static_cast<float>(player.player_base_height) };
+		cornerPos = { 0, static_cast<float>(player.player_base_height) };
 		offset = lineLength(playerPos, cornerPos) * -1;
 		background.Update(offset / 15);
 
 
 		//UPDATE PROJECTILE
-		for (int i = 0; i < Projectiles.size(); i++)
+		for (auto& projectile : Projectiles)
 		{
-			Projectiles[i].Update();
+			projectile.Update();
 		}
 		//UPDATE PROJECTILE
-		for (int i = 0; i < walls.walls_vec.size(); i++)
+		for (auto& wall : walls.walls_vec)
 		{
-			walls.walls_vec[i].Update();
+			wall.Update();
 		}
 
 		//CHECK ALL COLLISONS HERE
-		for (int i = 0; i < Projectiles.size(); i++)
+		for (auto& projectile : Projectiles)
 		{
-			if (Projectiles[i].type == EntityType::PLAYER_PROJECTILE)
+			if (projectile.type == EntityType::PLAYER_PROJECTILE)
 			{
-				for (int a = 0; a < Aliens.size(); a++)
+				for (auto& alien : Aliens)
 				{
-					if (CheckCollision(Aliens[a].position, Aliens[a].radius, Projectiles[i].lineStart, Projectiles[i].lineEnd))
+					if (CheckCollision(alien.position, alien.radius, projectile.lineStart, projectile.lineEnd))
 					{
 						// Kill!
 						std::cout << "Hit! \n";
 						// Set them as inactive, will be killed later
-						Projectiles[i].active = false;
-						Aliens[a].active = false;
+						projectile.active = false;
+						alien.active = false;
 						score += 100;
 					}
 				}
 			}
 
 			//ENEMY PROJECTILES HERE
-			for (int i = 0; i < Projectiles.size(); i++)
+			for (auto& projectile : Projectiles)
 			{
-				if (Projectiles[i].type == EntityType::ENEMY_PROJECTILE)
+				if (projectile.type == EntityType::ENEMY_PROJECTILE)
 				{
-					if (CheckCollision({player.x_pos, GetScreenHeight() - player.player_base_height }, player.radius, Projectiles[i].lineStart, Projectiles[i].lineEnd))
+					if (CheckCollision({player.x_pos, GetScreenHeight() - player.player_base_height }, player.radius, projectile.lineStart, projectile.lineEnd))
 					{
 						std::cout << "dead!\n"; 
-						Projectiles[i].active = false; 
+						projectile.active = false;
 						player.lives -= 1; 
 					}
 				}
 			}
 
 
-			for (int b = 0; b < walls.walls_vec.size(); b++)
+			for (auto& wall : walls.walls_vec)
 			{
-				if (CheckCollision(walls.walls_vec[b].position, walls.walls_vec[b].radius, Projectiles[i].lineStart, Projectiles[i].lineEnd))
+				if (CheckCollision(wall.position, wall.radius, projectile.lineStart, projectile.lineEnd))
 				{
 					// Kill!
 					std::cout << "Hit! \n";
 					// Set them as inactive, will be killed later
-					Projectiles[i].active = false;
-					walls.walls_vec[b].health -= 1;
+					projectile.active = false;
+					wall.health -= 1;
 				}
 			}
 		}
@@ -233,33 +231,12 @@ void Game::Update()
 		}
 
 		// REMOVE INACTIVE/DEAD ENITITIES
-		for (int i = 0; i < Projectiles.size(); i++)
-		{
-			if (Projectiles[i].active == false)
-			{
-				Projectiles.erase(Projectiles.begin() + i);
-				// Prevent the loop from skipping an instance because of index changes, since all insances after
-				// the killed objects are moved down in index. This is the same for all loops with similar function
-				i--;
-			}
-		}
-		for (int i = 0; i < Aliens.size(); i++)
-		{
-			if (Aliens[i].active == false)
-			{
-				Aliens.erase(Aliens.begin() + i);
-				i--;
-			}
-		}
-		for (int i = 0; i < walls.walls_vec.size(); i++)
-		{
-			if (walls.walls_vec[i].active == false)
-			{
-				walls.walls_vec.erase(walls.walls_vec.begin() + i);
-				i--;
-			}
-		}
 
+		std::erase_if(Projectiles, [](const auto& projectile) { return !projectile.active; });
+
+		std::erase_if(Aliens, [](const auto& alien) { return !alien.active; });
+
+		std::erase_if(walls.walls_vec, [](const auto& wall) { return !wall.active; });
 			
 		
 
@@ -360,17 +337,13 @@ void Game::Render()
 		DrawText("SPACE INVADERS", 200, 100, 160, YELLOW);
 
 		DrawText("PRESS SPACE TO BEGIN", 200, 350, 40, YELLOW);
-
-
 		break;
 	case State::GAMEPLAY:
 		//Code
 
-
 		//background render LEAVE THIS AT TOP
 		background.Render();
 
-		//DrawText("GAMEPLAY", 50, 30, 40, YELLOW);
 		DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
 		DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 
@@ -378,21 +351,21 @@ void Game::Render()
 		player.Render(resources.shipTextures.GetTexture()[player.activeTexture]);
 
 		//projectile rendering
-		for (int i = 0; i < Projectiles.size(); i++)
+		for (auto& projectile : Projectiles)
 		{
-			Projectiles[i].Render(resources.laserTexture.GetTexture());
+			projectile.Render(resources.laserTexture.GetTexture());
 		}
 
 		// wall rendering 
-		for (int i = 0; i < walls.walls_vec.size(); i++)
+		for (auto& wall : walls.walls_vec)
 		{
-			walls.walls_vec[i].Render(resources.barrierTexture.GetTexture());
+			wall.Render(resources.barrierTexture.GetTexture());
 		}
 
 		//alien rendering  
-		for (int i = 0; i < Aliens.size(); i++)
+		for (auto& alien : Aliens)
 		{
-			Aliens[i].Render(resources.alienTexture.GetTexture());
+			alien.Render(resources.alienTexture.GetTexture());
 		}
 
 
@@ -403,19 +376,9 @@ void Game::Render()
 		break;
 	case State::ENDSCREEN:
 		//Code
-		//DrawText("END", 50, 50, 40, YELLOW);
-
-
-		
-
-		
-
-
 		if (newHighScore)
 		{
 			DrawText("NEW HIGHSCORE!", 600, 300, 60, YELLOW);
-
-
 
 			// BELOW CODE IS FOR NAME INPUT RENDER
 			DrawText("PLACE MOUSE OVER INPUT BOX!", 600, 400, 20, YELLOW);
@@ -469,11 +432,12 @@ void Game::Render()
 
 			DrawText("LEADERBOARD", 50, 100, 40, YELLOW);
 
-			for (int i = 0; i < Leaderboard.size(); i++)
+			int nameOffset = 0;
+			for (auto& name : Leaderboard)
 			{
-				char* tempNameDisplay = Leaderboard[i].name.data();
-				DrawText(tempNameDisplay, 50, 140 + (i * 40), 40, YELLOW);
-				DrawText(TextFormat("%i", Leaderboard[i].score), 350, 140 + (i * 40), 40, YELLOW);
+				++nameOffset;
+				DrawText(name.name.data(), 50, 140 + (nameOffset * 40), 40, YELLOW);
+				DrawText(TextFormat("%i", name.score), 350, 140 + (nameOffset * 40), 40, YELLOW);
 			}
 		}
 

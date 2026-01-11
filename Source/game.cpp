@@ -77,7 +77,7 @@ or only load them during the game
 void Game::Launch()
 {
 	//LOAD SOME RESOURCES HERE
-	resources.Load();
+	//resources.Load();
 }
 
 /* TODO: Change iskeyreleased to iskeypressed
@@ -351,6 +351,8 @@ void Game::Update()
 
 void Game::Render()
 {
+	Drawer drawer;
+
 	switch (gameState)
 	{
 	case State::STARTSCREEN:
@@ -373,24 +375,24 @@ void Game::Render()
 		DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 
 		//player rendering 
-		player.Render(resources.shipTextures[player.activeTexture]);
+		player.Render(resources.shipTextures.GetTexture()[player.activeTexture]);
 
 		//projectile rendering
 		for (int i = 0; i < Projectiles.size(); i++)
 		{
-			Projectiles[i].Render(resources.laserTexture);
+			Projectiles[i].Render(resources.laserTexture.GetTexture());
 		}
 
 		// wall rendering 
 		for (int i = 0; i < walls.walls_vec.size(); i++)
 		{
-			walls.walls_vec[i].Render(resources.barrierTexture);
+			walls.walls_vec[i].Render(resources.barrierTexture.GetTexture());
 		}
 
 		//alien rendering  
 		for (int i = 0; i < Aliens.size(); i++)
 		{
-			Aliens[i].Render(resources.alienTexture);
+			Aliens[i].Render(resources.alienTexture.GetTexture());
 		}
 
 

@@ -171,10 +171,10 @@ struct Game
 	State gameState = {};
 
 	// Score
-	int score;
+	int score = 0;
 
 	// for later, make a file where you can adjust the number of walls (config file) 
-	int wallCount = 5;
+	int wallCount = 5; // 5
 
 	//Aliens shooting
 	float shootTimer = 0;
@@ -182,11 +182,11 @@ struct Game
 	//Aliens stuff? (idk cause liv wrote this)
 	Rectangle rec = { 0, 0 ,0 ,0 }; 
 
-	int formationWidth = 8;
-	int formationHeight = 5;
-	int alienSpacing = 80;
-	int formationX = 100;
-	int formationY = 50;
+	int formationWidth = 8; // 8
+	int formationHeight = 5; // 5
+	int alienSpacing = 80; //80
+	int formationX = 100; //100
+	int formationY = 50; //50
 
 	bool newHighScore = false;
 	
@@ -215,13 +215,13 @@ struct Game
 	// Entity Storage and Resources
 	Resources resources;
 
-	Player player;
+	Player player = Player();
 
-	std::vector<Projectile> Projectiles;
+	std::vector<Projectile> Projectiles{};
 
 	Walls walls = Walls(wallCount);
 
-	std::vector<Alien> Aliens;
+	std::vector<Alien> Aliens{};
 
 	std::vector<PlayerData> Leaderboard = { {"Player 1", 500}, {"Player 2", 400}, {"Player 3", 300}, {"Player 4", 200}, {"Player 5", 100} };
 	
@@ -229,10 +229,10 @@ struct Game
 
 
 
-	Vector2 playerPos;
-	Vector2 alienPos; 
-	Vector2 cornerPos;
-	float offset;
+	Vector2 playerPos{};
+	Vector2 alienPos{};
+	Vector2 cornerPos{};
+	float offset = 0; //
 
 
 

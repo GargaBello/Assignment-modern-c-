@@ -10,6 +10,9 @@
 make constructor take a argument to not make it a default constructor
 */
 
+
+//TODO: A RAII type only ever handles ONE resource. 
+//TODO: then you build containers / sets / aggregates / collections out of those RAII handles. 
 ShipTexture::ShipTexture()
 {
 	shipTextures.push_back(LoadTexture("./Assets/Ship1.png"));
@@ -38,52 +41,20 @@ std::vector<Texture2D> ShipTexture::GetTexture()
 	return shipTextures;
 }
 
-BarrierTexture::BarrierTexture() :
-	barrierTexture(LoadTexture("./Assets/Barrier.png"))
+TextureHandler::TextureHandler(std::string_view path) :
+	texture(LoadTexture(path.data()))
 {
-	if (barrierTexture.id == 0) {
-		throw std::runtime_error("Failed to load texture: Barrier.png");
+	if (texture.id == 0) {
+		throw std::runtime_error("Failed to load texture: " + std::string(path));
 	}
 }
 
-BarrierTexture::~BarrierTexture() {
-	UnloadTexture(barrierTexture);
+TextureHandler::~TextureHandler() {
+	UnloadTexture(texture);
 }
 
-Texture2D BarrierTexture::GetTexture() {
-	return barrierTexture;
-}
-
-AlienTexture::AlienTexture() :
-	alienTexture(LoadTexture("./Assets/Alien.png"))
-{
-	if (alienTexture.id == 0) {
-		throw std::runtime_error("Failed to load texture: Alien.png");
-	}
-}
-
-AlienTexture::~AlienTexture() {
-	UnloadTexture(alienTexture);
-}
-
-Texture2D AlienTexture::GetTexture() {
-	return alienTexture;
-}
-
-LaserTexture::LaserTexture() :
-	laserTexture(LoadTexture("./Assets/Laser.png"))
-{
-	if (laserTexture.id == 0) {
-		throw std::runtime_error("Failed to load texture: Laser.png");
-	}
-}
-
-LaserTexture::~LaserTexture() {
-	UnloadTexture(laserTexture);
-}
-
-Texture2D LaserTexture::GetTexture() {
-	return laserTexture;
+Texture2D TextureHandler::GetTexture() {
+	return texture;
 }
 
 Window::Window() noexcept
@@ -117,6 +88,8 @@ Drawer::Drawer()
 	BeginDrawing();
 
 	ClearBackground(BLACK);
+
+	SetTargetFPS(60);
 }
 
 Drawer::~Drawer()

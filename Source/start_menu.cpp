@@ -1,9 +1,13 @@
 #include "start_menu.h"
 
+/* TODO: Make work
+* 
+*/
+
 void StartMenu::Update() {
 	if (IsKeyReleased(KEY_SPACE))
 	{
-		
+		start_game = true;
 	}
 }
 

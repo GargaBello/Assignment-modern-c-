@@ -1,11 +1,13 @@
 #include "end_menu.h"
-#include "Leaderboard.h"
 #include <string>
+
+/* TODO: make work
+*/
 
 void EndMenu::Update() {
 	if (IsKeyReleased(KEY_ENTER) && !Leaderboard.newHighScore)
 	{
-		//Continue();
+		restartGame = true;
 	}
 
 
@@ -15,8 +17,8 @@ void EndMenu::Update() {
 		if (CheckCollisionPointRec(GetMousePosition(), box.textBox)) box.mouseOnText = true;
 		else box.mouseOnText = false;
 
-		if (box.mouseOnText)
-		{
+		if (box.mouseOnText) //TODO: invert the tests and reduce nesting.
+		{ 
 			// Set the window's cursor to the I-Beam
 			SetMouseCursor(MOUSE_CURSOR_IBEAM);
 
@@ -27,11 +29,11 @@ void EndMenu::Update() {
 			while (key > 0)
 			{
 				// NOTE: Only allow keys in range [32..125]
-				if ((key >= 32) && (key <= 125) && (box.letterCount < 9))
+				if ((key > 31) && (key <= 125) && (box.letterCount < 9)) //TODO: simplify tests, make them say what they're asking. "isValidCharacter()"
 				{
-					box.name[box.letterCount] = (char)key;
-					box.name[box.letterCount + 1] = '\0'; // Add null terminator at the end of the string.
-					box.letterCount++;
+					box.name.push_back( (char)key);
+				//	box.name[box.letterCount + 1] = '\0'; // Add null terminator at the end of the string.
+					box.letterCount++; //TODO: string knows it own length. stop couting. 
 				}
 
 				key = GetCharPressed();  // Check next character in the queue
@@ -40,6 +42,7 @@ void EndMenu::Update() {
 			//Remove chars 
 			if (IsKeyPressed(KEY_BACKSPACE))
 			{
+				//TODO: you have the string. just pop_back()
 				box.letterCount--;
 				if (box.letterCount < 0) box.letterCount = 0;
 				box.name[box.letterCount] = '\0';

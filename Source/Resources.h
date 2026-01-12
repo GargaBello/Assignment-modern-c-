@@ -33,65 +33,29 @@ public:
 	ShipTexture& operator=(const ShipTexture&&) = delete;
 };
 
-class AlienTexture {
+//TODO: we only need a single Texture type, if you pass the path to load into the constructor.
+class TextureHandler {
 private:
-	Texture2D alienTexture{};
+	Texture2D texture{};
 
 public:
 
-	AlienTexture();
-	~AlienTexture();
+	TextureHandler(std::string_view path);
+	~TextureHandler();
 
 	Texture2D GetTexture();
 
-	AlienTexture(const AlienTexture&) = delete;
-	AlienTexture& operator=(const AlienTexture&) = delete;
+	TextureHandler(const TextureHandler&) = delete;
+	TextureHandler& operator=(const TextureHandler&) = delete;
 
-	AlienTexture(const AlienTexture&&) = delete;
-	AlienTexture& operator=(const AlienTexture&&) = delete;
-
-};
-
-class BarrierTexture {
-private:
-	Texture2D barrierTexture{};
-
-public:
-
-	BarrierTexture();
-	~BarrierTexture();
-
-	Texture2D GetTexture();
-
-	BarrierTexture(const BarrierTexture&) = delete;
-	BarrierTexture& operator=(const BarrierTexture&) = delete;
-
-	BarrierTexture(const BarrierTexture&&) = delete;
-	BarrierTexture& operator=(const BarrierTexture&&) = delete;
-
-};
-
-class LaserTexture {
-private:
-	Texture2D laserTexture{};
-
-public:
-
-	LaserTexture();
-	~LaserTexture();
-
-	Texture2D GetTexture();
-
-	LaserTexture(const LaserTexture&) = delete;
-	LaserTexture& operator=(const LaserTexture&) = delete;
-
-	LaserTexture(const LaserTexture&&) = delete;
-	LaserTexture& operator=(const LaserTexture&&) = delete;
+	TextureHandler(const TextureHandler&&) = delete;
+	TextureHandler& operator=(const TextureHandler&&) = delete;
 
 };
 
 class Window {
 private:
+	// Todo: Make arguments to pass in
 	const int windowHeight = 1080;
 	const int windowWidth = 1920;
 	std::string_view title = "Space invaders";
@@ -141,19 +105,10 @@ public:
 
 struct Resources
 {
-	//void Load();
-	//void Unload();
-
 	ShipTexture shipTextures = ShipTexture();
-	AlienTexture alienTexture = AlienTexture();
-	BarrierTexture barrierTexture = BarrierTexture();
-	LaserTexture laserTexture = LaserTexture();
+	TextureHandler alienTexture = TextureHandler("./Assets/Alien.png");
+	TextureHandler barrierTexture = TextureHandler("./Assets/Barrier.png");
+	TextureHandler laserTexture = TextureHandler("./Assets/Laser.png");
 
 	Resources() = default;
-
-	/*std::vector<Texture2D> shipTextures;
-	Texture2D alienTexture;
-	Texture2D barrierTexture;
-	Texture2D laserTexture;*/
-
 };

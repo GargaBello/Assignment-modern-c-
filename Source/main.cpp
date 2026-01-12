@@ -1,63 +1,23 @@
-/*******************************************************************************************
-*
-*   raylib [core] example - Basic window
-*
-*   Welcome to raylib!
-*
-*   To test examples, just press F6 and execute raylib_compile_execute script
-*   Note that compiled executable is placed in the same folder as .c file
-*
-*   You can find all basic examples on C:\raylib\raylib\examples folder or
-*   raylib official webpage: www.raylib.com
-*
-*   Enjoy using raylib. :)
-*
-*   Example originally created with raylib 1.0, last time updated with raylib 1.0
-*
-*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
-*   BSD-like license that allows static linking with closed source software
-*b
-*   Copyright (c) 2013-2022 Ramon Santamaria (@raysan5)
-*
-********************************************************************************************/
-
 #include "raylib.h"
-#include "game.h"
+#include "app.h"
 
-/* TODO: Make init window and audio device raii classes 
-* Maybe move draw logic into game update, make a draw functtion in game
-* Check if sound is used, remove if not or make work
-*/
-//------------------------------------------------------------------------------------
-// Program main entry point
-//------------------------------------------------------------------------------------
 int main(void)
 {    
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    Window window;
+    //TODO: 
+    // remove all comments
+    // window should probably take arguments. 
+    // window should be an RAII type, meaning it should be able to throw, meaning, it will crash us if we're not inside a try/catch. (recommendation: move it into game. make it  a member)
+    //while (!WindowShouldClose())    //TODO: consider moving the core loop inside game, that should also own the window
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-
-    Game game = { State::STARTSCREEN };
-
-    //--------------------------------------------------------------------------------------
-
-    //AudioDevice audio("./hitHurt.ogg");
-    
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Update
-        game.Update();
-        // Draw
-        //----------------------------------------------------------------------------------
-        game.Render();
-        //----------------------------------------------------------------------------------
+    try {
+        App app;
+        app.Run();
     }
-
-    //TODO: Remove if unused
-    std::string filename = "level.txt";  
-
+    catch (const std::runtime_error& e) {
+        std::print("Runtime error: {}\n", e.what());
+    }
+    catch (...) {
+        std::print("Unkown error occurred\n");
+    }
     return 0;
 }

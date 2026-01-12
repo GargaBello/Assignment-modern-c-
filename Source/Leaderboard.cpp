@@ -7,20 +7,10 @@ bool LeaderBoard::CheckNewHighScore(int score) const noexcept {
 void LeaderBoard::InsertNewHighScore(std::string name, int score) {
 	PlayerData newData(name, score);
 	
-
-	/*for (auto& highscore : Leaderboard)
-	{
-		if (newData.score > highscore.score)
-		{
-
-			Leaderboard.insert(Leaderboard.begin() + i, newData);
-
-			Leaderboard.pop_back();
-
-			i = Leaderboard.size();
-
-		}
-	}*/
+	//consider: 
+	// push_back the new value
+	// sort the vector
+	// if the vector is too long, pop_back
 
 	auto it = std::find_if(Leaderboard.begin(), Leaderboard.end(),
 		[&](const PlayerData& data) {

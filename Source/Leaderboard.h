@@ -15,11 +15,11 @@ struct PlayerData
 
 class LeaderBoard {
 private:
-	std::vector<PlayerData> Leaderboard = { {"Player 1", 500}, {"Player 2", 400}, {"Player 3", 300}, {"Player 4", 200}, {"Player 5", 100} };
+	std::vector<PlayerData> Leaderboard = { PlayerData{"Player 1", 500}, PlayerData{"Player 2", 400}, PlayerData{"Player 3", 300}, PlayerData{"Player 4", 200}, PlayerData{"Player 5", 100} };
 public:
 	bool newHighScore = false;
 
-	bool CheckNewHighScore(int score) const;
+	bool CheckNewHighScore(int score) const noexcept;
 
 	void InsertNewHighScore(std::string name, int score);
 

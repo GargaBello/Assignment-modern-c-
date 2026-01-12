@@ -24,16 +24,19 @@
     <ClCompile Include="Source\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="level.cpp">
+    <ClCompile Include="Source\end_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="start_menu.cpp">
+    <ClCompile Include="Source\Leaderboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="end_menu.cpp">
+    <ClCompile Include="Source\level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Leaderboard.cpp">
+    <ClCompile Include="Source\start_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,16 +47,19 @@
     <ClInclude Include="Source\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="level.h">
+    <ClInclude Include="Source\app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="start_menu.h">
+    <ClInclude Include="Source\end_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="end_menu.h">
+    <ClInclude Include="Source\start_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Leaderboard.h">
+    <ClInclude Include="Source\Leaderboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,10 +2,9 @@
 
 #include "raylib.h"
 
-struct EndMenu {
+struct StartMenu {
 
-	TextBox box;
-	LeaderBoard Leaderboard;
+	bool start_game = false;
 
 	void Render() noexcept;
 

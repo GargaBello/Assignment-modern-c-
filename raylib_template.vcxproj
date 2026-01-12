@@ -167,15 +167,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="end_menu.cpp" />
+    <ClCompile Include="Leaderboard.cpp" />
     <ClCompile Include="level.cpp" />
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Resources.cpp" />
+    <ClCompile Include="start_menu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="end_menu.h" />
+    <ClInclude Include="Leaderboard.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\Resources.h" />
+    <ClInclude Include="start_menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

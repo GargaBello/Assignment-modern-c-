@@ -27,8 +27,8 @@ enum struct EntityType
 
 struct PlayerData
 {
-	std::string name;
-	int score;
+	std::string name{};
+	int score = 0;
 };
 
 /*TODO: Make the player variables initialisation as part of construction

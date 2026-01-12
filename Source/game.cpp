@@ -19,7 +19,7 @@ float lineLength(Vector2 A, Vector2 B) //Uses pythagoras to calculate the length
 
 bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pythagoras to calculate if a point is within a circle or not
 {
-	float distanceToCentre = lineLength(circlePos, point);
+	const float distanceToCentre = lineLength(circlePos, point);
 
 	if (distanceToCentre < radius)
 	{
@@ -88,6 +88,7 @@ void Game::Launch()
 * Make projectile creation a construction instead of two step initialisation
 * Look into the erasing of entities and see if there is a better way
 * Probly change the way the name in the highscore is put in and especially make it string or string_view
+* Split function into start menu, game screen and end menu and make leaderboard a separate class
 */
 
 void Game::Update()

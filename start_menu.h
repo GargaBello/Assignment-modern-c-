@@ -4,7 +4,7 @@
 
 struct StartMenu {
 
-	void Render();
+	void Render() noexcept;
 
 	void Update();
 };

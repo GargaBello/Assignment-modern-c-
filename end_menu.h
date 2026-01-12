@@ -7,7 +7,7 @@ struct EndMenu {
 	TextBox box;
 	LeaderBoard Leaderboard;
 
-	void Render();
+	void Render() noexcept;
 
 	void Update();
 };

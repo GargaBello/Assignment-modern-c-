@@ -71,7 +71,7 @@ void EndMenu::Update() {
 	}
 }
 
-void EndMenu::Render() {
+void EndMenu::Render() noexcept {
 	if (Leaderboard.newHighScore)
 	{
 		DrawText("NEW HIGHSCORE!", 600, 300, 60, YELLOW);

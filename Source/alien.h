@@ -18,12 +18,15 @@ struct Alien
 		{
 			speed = -2;
 			position.y += 50;
+			rect.y = position.y;
 		}
 		else if (position.x <= 0)
 		{
 			speed = 2;
 			position.y += 50;
+			rect.y = position.y;
 		}
+		rect.x = position.x;
 	}
 
 	void Render(Texture2D texture) const noexcept{

@@ -31,8 +31,7 @@ public:
 };
 
 struct TextBox {
-	//TEXTBOX ENTER
-	std::string name{};      //Should be maximum of 8 letters
+	std::string name{};
 	int letterCount = 0;
 
 	Rectangle textBox = { 600, 500, 225, 50 };

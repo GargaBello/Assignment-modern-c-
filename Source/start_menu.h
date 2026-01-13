@@ -6,7 +6,7 @@ struct StartMenu {
 
 	bool start_game = false;
 
-	void Render() noexcept;
+	void Render() const noexcept;
 
-	void Update();
+	void Update() noexcept;
 };

@@ -15,8 +15,6 @@ void Game::Start()
 	*/
 	player.lives = 3;
 
-	SpawnAliens();
-
 	score = 0;
 }
 
@@ -56,15 +54,10 @@ void Game::Update()
 		{
 			alien.Update(); 
 
-			if (alien.position.y > GetScreenHeight() - player.player_base_height)
+			if (alien.position.y > GetScreenHeight() - player.spawn_offset)
 			{
 				End();
 			}
-		}
-
-		if (aliens.aliens.size() < 1)
-		{
-			SpawnAliens();
 		}
 
 		for (auto& projectile : playerProjectiles)
@@ -121,7 +114,7 @@ void Game::Update()
 		if (IsKeyPressed(KEY_SPACE))
 		{
 			float window_height = static_cast<float>(GetScreenHeight()); // TODO: use narrow cast instead
-			Vector2 projPos = { player.x_pos, window_height - 130};
+			Vector2 projPos = { player.position.x, window_height - 130};
 			PlayerProjectile newProjectile(projPos);
 			playerProjectiles.push_back(newProjectile);
 		}
@@ -160,8 +153,6 @@ void Game::Update()
 
 void Game::Render()
 {
-	Drawer drawer;
-
 	background.Render();
 	
 	DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);

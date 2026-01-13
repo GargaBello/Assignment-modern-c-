@@ -3,7 +3,7 @@
 
 struct PlayerProjectile {
 	Vector2 position{};
-	int speed = 15; // 15 if player //TODO: this comments begs to become a function. Projectile::isPlayerProjectile() { return speed < 0;} 
+	int speed = -15; // 15 if player //TODO: this comments begs to become a function. Projectile::isPlayerProjectile() { return speed < 0;} 
 	float width = 15;
 	bool active = true;
 
@@ -26,7 +26,7 @@ struct PlayerProjectile {
 
 struct EnemyProjectile {
 	Vector2 position{};
-	int speed = -15; // 15 if player //TODO: this comments begs to become a function. Projectile::isPlayerProjectile() { return speed < 0;} 
+	int speed = 15; // 15 if player //TODO: this comments begs to become a function. Projectile::isPlayerProjectile() { return speed < 0;} 
 	float width = 15;
 	bool active = true;
 

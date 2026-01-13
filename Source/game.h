@@ -26,8 +26,6 @@ struct Game
 	void Update();
 	void Render();
 
-	void SpawnAliens();
-
 	//TODO: raylib has a rectangle interfection test. use it. Replace all custom collision logic with the library function, and make all entities adhere to the simple
 	// Rectangle getCollisionBox() const noexcept interface. 
 

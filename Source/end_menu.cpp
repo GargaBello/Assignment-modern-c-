@@ -10,8 +10,6 @@ void EndMenu::Update() {
 		restartGame = true;
 	}
 
-
-
 	if (Leaderboard.newHighScore)
 	{
 		if (CheckCollisionPointRec(GetMousePosition(), box.textBox)) box.mouseOnText = true;
@@ -43,9 +41,7 @@ void EndMenu::Update() {
 			if (IsKeyPressed(KEY_BACKSPACE))
 			{
 				//TODO: you have the string. just pop_back()
-				box.letterCount--;
-				if (box.letterCount < 0) box.letterCount = 0;
-				box.name[box.letterCount] = '\0';
+				box.name.pop_back();
 			}
 		}
 		else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
@@ -79,14 +75,18 @@ void EndMenu::Render() noexcept {
 	{
 		DrawText("NEW HIGHSCORE!", 600, 300, 60, YELLOW);
 
-		// BELOW CODE IS FOR NAME INPUT RENDER
 		DrawText("PLACE MOUSE OVER INPUT BOX!", 600, 400, 20, YELLOW);
 
 		DrawRectangleRec(box.textBox, LIGHTGRAY);
 		if (box.mouseOnText)
 		{
 			// HOVER CONFIRMIATION
-			DrawRectangleLines((int)box.textBox.x, (int)box.textBox.y, (int)box.textBox.width, (int)box.textBox.height, RED);
+			//DrawRectangleLines((int)box.textBox.x, (int)box.textBox.y, (int)box.textBox.width, (int)box.textBox.height, RED);
+			DrawRectangleLinesEx(box.textBox, 2, RED);
+			if (((box.framesCounter / 20) % 2) == 0)
+			{
+				DrawText("_", (int)box.textBox.x + 8 + MeasureText(box.name.data(), 40), (int)box.textBox.y + 12, 40, MAROON);
+			}
 		}
 		else
 		{
@@ -96,30 +96,7 @@ void EndMenu::Render() noexcept {
 		//Draw the name being typed out
 		DrawText(box.name.data(), (int)box.textBox.x + 5, (int)box.textBox.y + 8, 40, MAROON);
 
-		//Draw the text explaining how many characters are used
-		DrawText(TextFormat("INPUT CHARS: %i/%i", box.letterCount, 8), 600, 600, 20, YELLOW);
-
-		if (box.mouseOnText)
-		{
-			if (box.letterCount < 9)
-			{
-				// Draw blinking underscore char
-				if (((box.framesCounter / 20) % 2) == 0)
-				{
-					DrawText("_", (int)box.textBox.x + 8 + MeasureText(box.name.data(), 40), (int)box.textBox.y + 12, 40, MAROON);
-				}
-
-			}
-			else
-			{
-				//Name needs to be shorter
-				DrawText("Press BACKSPACE to delete chars...", 600, 650, 20, YELLOW);
-			}
-
-		}
-
-		// Explain how to continue when name is input
-		if (box.letterCount > 0 && box.letterCount < 9)
+		if (!box.name.size() == 0)
 		{
 			DrawText("PRESS ENTER TO CONTINUE", 600, 800, 40, YELLOW);
 		}

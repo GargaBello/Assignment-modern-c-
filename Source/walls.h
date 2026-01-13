@@ -29,4 +29,11 @@ struct Walls
 	int wallCount = 5; //TODO: const members are always a problem. They break value semantics, same as a reference-member. 
 	float wall_y_offset = 250; //TODO: you meant to write static const or static constexpr. 
 	std::vector<Wall> walls_vec{};
+
+	Walls() {
+		walls_vec.resize(wallCount); 
+		for (Wall& wall : walls_vec) {
+
+		}
+	}
 };

@@ -3,11 +3,9 @@
 #include "gsl/algorithm"
 
 struct Player {
-	float x_pos = gsl::narrow_cast<float>(GetScreenWidth()) / 2;
-	float y_pos = gsl::narrow_cast<float>(GetScreenHeight()) - player_base_height;
-	Vector2 position = { gsl::narrow_cast<float>(GetScreenWidth()) / 2, gsl::narrow_cast<float>(GetScreenHeight()) - player_base_height };
-	float speed = 7; //TODO: velocity already has direction, so either this or int direction needs to go. 
-	float player_base_height = 70.0f;
+
+	Vector2 position = { gsl::narrow_cast<float>(GetScreenWidth()) / 2, gsl::narrow_cast<float>(GetScreenHeight() - 200) };
+	float speed = 7;
 	float radius = 50.0f;
 	float timer = 0;
 	int lives = 3;
@@ -15,7 +13,7 @@ struct Player {
 
 	Rectangle rect = { position.x, position.y, radius, radius };
 
-	const void Render(Texture2D texture) noexcept {
+	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
 	}; //TODO: render should always be const
 
@@ -23,21 +21,25 @@ struct Player {
 		if (IsKeyDown(KEY_LEFT))
 		{
 			speed = -7;
+			position.x += speed;
+
 		}
 		if (IsKeyDown(KEY_RIGHT))
 		{
 			speed = 7;
+			position.x += speed;
+
 		}
 
-		x_pos += speed;
+		rect.x = position.x;
 
-		if (x_pos < 0 + radius)
+		if (position.x < 0 + radius)
 		{
-			x_pos = 0 + radius;
+			position.x = 0 + radius;
 		}
-		else if (x_pos > GetScreenWidth() - radius)
+		else if (position.x > GetScreenWidth() - radius)
 		{
-			x_pos = GetScreenWidth() - radius;
+			position.x = GetScreenWidth() - radius;
 		}
 
 		timer += GetFrameTime();
@@ -52,5 +54,5 @@ struct Player {
 			activeTexture++;
 			timer = 0;
 		}
-	}//TODO: surely this can be noexcept? 
+	}
 };

@@ -29,7 +29,7 @@ void Game::End()
 	playerProjectiles.clear();
 	enemyProjectiles.clear();
 	walls.walls_vec.clear();
-	Aliens.clear();
+	aliens.aliens.clear();
 }
 
 /* TODO: Change iskeyreleased to iskeypressed
@@ -52,7 +52,7 @@ void Game::Update()
 
 		player.Update();
 		
-		for (auto& alien : Aliens)
+		for (auto& alien : aliens.aliens)
 		{
 			alien.Update(); 
 
@@ -62,7 +62,7 @@ void Game::Update()
 			}
 		}
 
-		if (Aliens.size() < 1)
+		if (aliens.aliens.size() < 1)
 		{
 			SpawnAliens();
 		}
@@ -84,26 +84,34 @@ void Game::Update()
 
 		for (auto& projectile : playerProjectiles)
 		{
-			for (auto& alien : Aliens)
+			for (auto& alien : aliens.aliens)
 			{
-				if (CheckCollisionRecs(player.rect, projectile.rect)) {
+				if (CheckCollisionRecs(alien.rect, projectile.rect)) {
 					projectile.active = false;
 					alien.active = false;
 					score += 100;
 				}
 			}
 
-			for (auto& projectile : enemyProjectiles)
+			for (auto& wall : walls.walls_vec)
 			{
-				if (CheckCollisionRecs(player.rect, projectile.rect)) {
+				if (CheckCollisionRecs(wall.rect, projectile.rect)) {
 					projectile.active = false;
-					player.lives -= 1;
+					wall.health -= 1;
 				}
+			}
+		}
+
+		for (auto& projectile : enemyProjectiles)
+		{
+			if (CheckCollisionRecs(player.rect, projectile.rect)) {
+				projectile.active = false;
+				player.lives -= 1;
 			}
 
 			for (auto& wall : walls.walls_vec)
 			{
-				if (CheckCollisionRecs(player.rect, projectile.rect)) {
+				if (CheckCollisionRecs(wall.rect, projectile.rect)) {
 					projectile.active = false;
 					wall.health -= 1;
 				}
@@ -112,9 +120,9 @@ void Game::Update()
 
 		if (IsKeyPressed(KEY_SPACE))
 		{
-			const float window_height = static_cast<float>(GetScreenHeight()); // TODO: use narrow cast instead
-			const Vector2 projPos = { player.x_pos, window_height - 130};
-			const PlayerProjectile newProjectile(projPos);
+			float window_height = static_cast<float>(GetScreenHeight()); // TODO: use narrow cast instead
+			Vector2 projPos = { player.x_pos, window_height - 130};
+			PlayerProjectile newProjectile(projPos);
 			playerProjectiles.push_back(newProjectile);
 		}
 
@@ -125,12 +133,12 @@ void Game::Update()
 
 			int randomAlienIndex = 0;
 
-			if (Aliens.size() > 1)
+			if (aliens.aliens.size() > 1)
 			{
-				randomAlienIndex = rand() % Aliens.size();
+				randomAlienIndex = rand() % aliens.aliens.size();
 			}
 
-			Vector2 projPos = { Aliens[randomAlienIndex].position};
+			Vector2 projPos = { aliens.aliens[randomAlienIndex].position};
 			projPos.y += 40;
 			const EnemyProjectile newProjectile(projPos);
 			enemyProjectiles.push_back(newProjectile);
@@ -140,7 +148,7 @@ void Game::Update()
 		std::erase_if(playerProjectiles, [](const auto& projectile) { return !projectile.active; });
 		std::erase_if(enemyProjectiles, [](const auto& projectile) { return !projectile.active; });
 
-		std::erase_if(Aliens, [](const auto& alien) { return !alien.active; });
+		std::erase_if(aliens.aliens, [](const auto& alien) { return !alien.active; });
 
 		std::erase_if(walls.walls_vec, [](const auto& wall) { return !wall.active; });
 }
@@ -159,10 +167,8 @@ void Game::Render()
 	DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
 	DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 	
-	//player rendering 
 	player.Render(resources.shipTexture.GetTexture());
 	
-	//projectile rendering
 	for (auto& projectile : playerProjectiles)
 	{
 		projectile.Render(resources.laserTexture.GetTexture());
@@ -173,30 +179,13 @@ void Game::Render()
 		projectile.Render(resources.laserTexture.GetTexture());
 	}
 	
-	// wall rendering 
 	for (auto& wall : walls.walls_vec)
 	{
 		wall.Render(resources.barrierTexture.GetTexture());
 	}
 	
-	//alien rendering  
-	for (auto& alien : Aliens)
+	for (auto& alien : aliens.aliens)
 	{
 		alien.Render(resources.alienTexture.GetTexture());
-	}
-}
-
-/* TODO: Make for loops into ranged for loops
-* Make alien an construction
-* maybe put in alien.h
-*/
-void Game::SpawnAliens()
-{
-	for (const int& row : std::views::iota(0, formationHeight)) {
-		for (const int& col : std::views::iota(0, formationHeight)) {
-			Vector2 alienPos = { formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) };
-			Alien newAlien(alienPos);
-			Aliens.push_back(newAlien);
-		}
 	}
 }

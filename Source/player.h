@@ -16,7 +16,7 @@ struct Player {
 	Rectangle rect = { position.x, position.y, radius, radius };
 
 	const void Render(Texture2D texture) noexcept {
-		DrawTextureV(texture, { x_pos, y_pos }, WHITE);
+		DrawTextureV(texture, position, WHITE);
 	}; //TODO: render should always be const
 
 	void Update() noexcept {

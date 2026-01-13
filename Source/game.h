@@ -20,12 +20,6 @@ struct Game
 	//Aliens shooting
 	float shootTimer = 0;
 
-	int formationWidth = 8;
-	int formationHeight = 5;
-	int alienSpacing = 80;
-	int formationX = 100;
-	int formationY = 50;
-
 	void Start();
 	void End();
 
@@ -46,7 +40,7 @@ struct Game
 
 	Walls walls;
 
-	std::vector<Alien> Aliens{};
-
 	Background background;
+
+	Aliens aliens;
 };

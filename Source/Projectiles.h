@@ -15,6 +15,8 @@ struct PlayerProjectile {
 		{
 			active = false;
 		}
+
+		position.y += speed;
 	} //noexcept
 
 	void Render(Texture2D texture) const noexcept {
@@ -36,6 +38,8 @@ struct EnemyProjectile {
 		{
 			active = false;
 		}
+
+		position.y += speed;
 	} //noexcept
 
 	void Render(Texture2D texture) const noexcept {

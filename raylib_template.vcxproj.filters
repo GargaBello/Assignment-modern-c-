@@ -62,19 +62,19 @@
     <ClInclude Include="Source\level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Projectiles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="walls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\alien.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\background.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\walls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

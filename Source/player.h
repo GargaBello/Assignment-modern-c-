@@ -6,8 +6,9 @@ struct Player {
 
 	Vector2 position = { gsl::narrow_cast<float>(GetScreenWidth()) / 2, gsl::narrow_cast<float>(GetScreenHeight() - 200) };
 	float speed = 7;
-	float radius = 50.0f;
+	float radius = 100.0f;
 	float timer = 0;
+	int spawn_offset = 200;
 	int lives = 3;
 	int activeTexture = 0;
 
@@ -15,6 +16,7 @@ struct Player {
 
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
+		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	}; //TODO: render should always be const
 
 	void Update() noexcept {

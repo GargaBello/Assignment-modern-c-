@@ -13,6 +13,7 @@ struct App {
 	EndMenu end_menu;
 	Game game;
 	LeaderBoard leaderboard;
+	PlayerData leaderboardData;
 	
 
 	enum class gameState {

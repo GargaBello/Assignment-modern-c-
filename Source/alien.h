@@ -5,7 +5,7 @@
 struct Alien
 {
 	Vector2 position{};
-	float radius = 30; 
+	float radius = 100.0f; 
 	bool active = true;
 	int speed = 2;
 
@@ -31,6 +31,7 @@ struct Alien
 
 	void Render(Texture2D texture) const noexcept{
 		DrawTextureV(texture, position, WHITE);
+		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	}
 };
 

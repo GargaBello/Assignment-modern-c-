@@ -6,6 +6,7 @@
 #include "walls.h"
 #include "background.h"
 #include "Projectiles.h"
+#include "Leaderboard.h"
 #include <vector>
 #include <string>
 #include <ranges>
@@ -20,7 +21,6 @@ struct Game
 	//Aliens shooting
 	float shootTimer = 0;
 
-	void Start();
 	void End();
 
 	void Update();
@@ -32,11 +32,14 @@ struct Game
 	Resources resources; //consider using RAII and just giving each type their own Resource handle. No reason to store those assets here in game. 
 
 	Player player;
+	PlayerData leaderboardData;
 
 	std::vector<EnemyProjectile> enemyProjectiles{}; 
 	std::vector<PlayerProjectile> playerProjectiles{};
 
-	Walls walls;
+	Wall wall;
+
+	Walls walls = Walls();
 
 	Background background;
 

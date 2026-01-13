@@ -5,19 +5,6 @@
 #include <thread>
 #include <fstream>
 
-/* TODO: Make into construction, make all initialisations inside constructions aswell
-* Change the starting of the game as needed to compensate
-* Make for loops into an algo or ranged for loops
-*/
-void Game::Start()
-{
-	/* TODO: Find better solution to resetting player attributes when game is restarted without game struct being reconstructed
-	*/
-	player.lives = 3;
-
-	score = 0;
-}
-
 /* TODO: maybe make into destructor
 * Refactor away, find new way to restar game, probably reconstruct the game 
 */
@@ -60,6 +47,8 @@ void Game::Update()
 			}
 		}
 
+		aliens.Update();
+
 		for (auto& projectile : playerProjectiles)
 		{
 			projectile.Update();
@@ -82,7 +71,7 @@ void Game::Update()
 				if (CheckCollisionRecs(alien.rect, projectile.rect)) {
 					projectile.active = false;
 					alien.active = false;
-					score += 100;
+					leaderboardData.score += 100;
 				}
 			}
 
@@ -159,6 +148,7 @@ void Game::Render()
 	DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 	
 	player.Render(resources.shipTexture.GetTexture());
+	wall.Render(resources.barrierTexture.GetTexture());
 	
 	for (auto& projectile : playerProjectiles)
 	{

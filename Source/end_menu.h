@@ -7,6 +7,7 @@ struct EndMenu {
 
 	TextBox box;
 	LeaderBoard Leaderboard;
+	PlayerData leaderboardData;
 	bool restartGame = false;
 
 	void Render() noexcept;

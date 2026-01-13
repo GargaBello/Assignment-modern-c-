@@ -17,21 +17,15 @@ void EndMenu::Update() {
 
 		if (box.mouseOnText) //TODO: invert the tests and reduce nesting.
 		{ 
-			// Set the window's cursor to the I-Beam
 			SetMouseCursor(MOUSE_CURSOR_IBEAM);
 
-			// Get char pressed on the queue
 			int key = GetCharPressed();
 
-			// Check if more characters have been pressed on the same frame
 			while (key > 0)
 			{
-				// NOTE: Only allow keys in range [32..125]
 				if ((key > 31) && (key <= 125) && (box.letterCount < 9)) //TODO: simplify tests, make them say what they're asking. "isValidCharacter()"
 				{
 					box.name.push_back( (char)key);
-				//	box.name[box.letterCount + 1] = '\0'; // Add null terminator at the end of the string.
-					box.letterCount++; //TODO: string knows it own length. stop couting. 
 				}
 
 				key = GetCharPressed();  // Check next character in the queue
@@ -40,7 +34,6 @@ void EndMenu::Update() {
 			//Remove chars 
 			if (IsKeyPressed(KEY_BACKSPACE))
 			{
-				//TODO: you have the string. just pop_back()
 				box.name.pop_back();
 			}
 		}
@@ -80,8 +73,6 @@ void EndMenu::Render() noexcept {
 		DrawRectangleRec(box.textBox, LIGHTGRAY);
 		if (box.mouseOnText)
 		{
-			// HOVER CONFIRMIATION
-			//DrawRectangleLines((int)box.textBox.x, (int)box.textBox.y, (int)box.textBox.width, (int)box.textBox.height, RED);
 			DrawRectangleLinesEx(box.textBox, 2, RED);
 			if (((box.framesCounter / 20) % 2) == 0)
 			{
@@ -90,11 +81,13 @@ void EndMenu::Render() noexcept {
 		}
 		else
 		{
-			DrawRectangleLines((int)box.textBox.x, (int)box.textBox.y, (int)box.textBox.width, (int)box.textBox.height, DARKGRAY);
+			//DrawRectangleLines((int)box.textBox.x, (int)box.textBox.y, (int)box.textBox.width, (int)box.textBox.height, DARKGRAY);
+			DrawRectangleLinesEx(box.textBox, 3, DARKGRAY);
 		}
 
 		//Draw the name being typed out
-		DrawText(box.name.data(), (int)box.textBox.x + 5, (int)box.textBox.y + 8, 40, MAROON);
+		//DrawText(box.name.data(), (int)box.textBox.x + 5, (int)box.textBox.y + 8, 40, MAROON);
+		DrawTextEx(box.font, box.name.data(), { box.textBox.x + 5, box.textBox.y + 8 }, 40, 5, MAROON);
 
 		if (!box.name.size() == 0)
 		{

@@ -12,12 +12,12 @@ struct PlayerData
 	std::string name{};
 	int score = 0;
 
-	PlayerData(std::string name, int score);
+	//PlayerData(std::string name);
 };
 
 class LeaderBoard {
 private:
-	std::vector<PlayerData> Leaderboard = { PlayerData{"Player 1", 500}, PlayerData{"Player 2", 400}, PlayerData{"Player 3", 300}, PlayerData{"Player 4", 200}, PlayerData{"Player 5", 100} };
+	std::vector<PlayerData> Leaderboard = {};
 public:
 	bool newHighScore = false;
 
@@ -38,6 +38,8 @@ struct TextBox {
 	bool mouseOnText = false;
 
 	int framesCounter = 0;
+
+	Font font;
 
 	TextBox() = default;
 };

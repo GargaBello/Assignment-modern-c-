@@ -14,25 +14,6 @@ Maybe split textures into individual classes for easier managment
 Add the textures and files into the resource files in the project, as in the thing between source files and header files
 */
 
-
-
-class ShipTexture {
-private:
-	std::vector<Texture2D> shipTextures{};
-public:
-
-	ShipTexture();
-	~ShipTexture();
-
-	std::vector<Texture2D> GetTexture();
-
-	ShipTexture(const ShipTexture&) = delete;
-	ShipTexture& operator=(const ShipTexture&) = delete;
-
-	ShipTexture(const ShipTexture&&) = delete;
-	ShipTexture& operator=(const ShipTexture&&) = delete;
-};
-
 //TODO: we only need a single Texture type, if you pass the path to load into the constructor.
 class TextureHandler {
 private:
@@ -105,10 +86,18 @@ public:
 
 struct Resources
 {
-	ShipTexture shipTextures = ShipTexture();
-	TextureHandler alienTexture = TextureHandler("./Assets/Alien.png");
-	TextureHandler barrierTexture = TextureHandler("./Assets/Barrier.png");
-	TextureHandler laserTexture = TextureHandler("./Assets/Laser.png");
 
-	Resources() = default;
+	//TODO: move into each of the entities
+	TextureHandler shipTexture;
+	TextureHandler alienTexture;
+	TextureHandler barrierTexture;
+	TextureHandler laserTexture;
+
+	Resources() 
+		: alienTexture("./Assets/Alien.png")
+		, barrierTexture("./Assets/Barrier.png")
+		, laserTexture("./Assets/Laser.png")
+		, shipTexture("./Assets/Ship2.png")
+	{
+	}
 };

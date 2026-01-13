@@ -5,91 +5,31 @@
 #include <thread>
 #include <fstream>
 
-/* Todo: Check if functions are used and maybe replace if not really needed
-* Otherwise use algorithms to make more modern
-*/
-
-// MATH FUNCTIONS
-float lineLength(Vector2 A, Vector2 B) //Uses pythagoras to calculate the length of a line
-{
-	const float length = sqrtf(pow(B.x - A.x, 2) + pow(B.y - A.y, 2));
-
-	return length;
-}
-
-bool pointInCircle(Vector2 circlePos, float radius, Vector2 point) // Uses pythagoras to calculate if a point is within a circle or not
-{
-	const float distanceToCentre = lineLength(circlePos, point);
-
-	if (distanceToCentre < radius)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-Game::Game()
-	: score(0)
-	, wallCount(5)
-	, shootTimer(0)
-	, formationWidth(8)
-	, formationHeight(5)
-	, alienSpacing(80)
-	, formationX(100)
-	, formationY(50)
-{
-}
-
 /* TODO: Make into construction, make all initialisations inside constructions aswell
 * Change the starting of the game as needed to compensate
 * Make for loops into an algo or ranged for loops
 */
 void Game::Start()
 {
-
 	/* TODO: Find better solution to resetting player attributes when game is restarted without game struct being reconstructed
 	*/
 	player.lives = 3;
 
-	//creating aliens
 	SpawnAliens();
 
-	//reset score
 	score = 0;
-
-	gameState = State::GAMEPLAY;
-
 }
 
 /* TODO: maybe make into destructor
+* Refactor away, find new way to restar game, probably reconstruct the game 
 */
 
 void Game::End()
 {
-	//SAVE SCORE AND UPDATE SCOREBOARD
-	Projectiles.clear();
+	playerProjectiles.clear();
+	enemyProjectiles.clear();
 	walls.walls_vec.clear();
 	Aliens.clear();
-	//newHighScore = CheckNewHighScore();
-	gameState = State::ENDSCREEN;
-}
-
-void Game::Continue()
-{
-	//SaveLeaderboard();
-	gameState = State::STARTSCREEN;
-}
-
-/* TODO: Choose between loading resources at program start and unloading them when it ends 
-or only load them during the game
-*/
-void Game::Launch()
-{
-	//LOAD SOME RESOURCES HERE
-	//resources.Load();
 }
 
 /* TODO: Change iskeyreleased to iskeypressed
@@ -105,27 +45,13 @@ void Game::Launch()
 
 void Game::Update()
 {
-	//switch (gameState)
-	//{
-	//case State::STARTSCREEN:
-	//	//Code 
-	//	if (IsKeyReleased(KEY_SPACE))
-	//	{
-	//		Start();
-	//	}
-
-	//	break;
-	//case State::GAMEPLAY:
-		//Code
 		if (IsKeyReleased(KEY_Q))
 		{
 			End();
 		}
 
-		//Update Player
 		player.Update();
 		
-		//Update Aliens and Check if they are past player
 		for (auto& alien : Aliens)
 		{
 			alien.Update(); 
@@ -136,94 +62,62 @@ void Game::Update()
 			}
 		}
 
-		//End game if player dies
-		if (player.lives < 1)
-		{
-			End();
-		}
-
-		//Spawn new aliens if aliens run out
 		if (Aliens.size() < 1)
 		{
 			SpawnAliens();
 		}
 
-
-		// Update background with offset
-		playerPos = { player.x_pos, static_cast<float>(player.player_base_height) };
-		cornerPos = { 0, static_cast<float>(player.player_base_height) };
-		offset = lineLength(playerPos, cornerPos) * -1;
-		background.Update(offset / 15);
-
-
-		//UPDATE PROJECTILE
-		for (auto& projectile : Projectiles)
+		for (auto& projectile : playerProjectiles)
 		{
 			projectile.Update();
 		}
-		//UPDATE PROJECTILE
+
+		for (auto& projectile : enemyProjectiles)
+		{
+			projectile.Update();
+		}
+
 		for (auto& wall : walls.walls_vec)
 		{
 			wall.Update();
 		}
 
-		//CHECK ALL COLLISONS HERE
-		for (auto& projectile : Projectiles)
+		for (auto& projectile : playerProjectiles)
 		{
-			if (projectile.type == EntityType::PLAYER_PROJECTILE)
+			for (auto& alien : Aliens)
 			{
-				for (auto& alien : Aliens)
-				{
-					if (CheckCollision(alien.position, alien.radius, projectile.lineStart, projectile.lineEnd))
-					{
-						// Kill!
-						std::cout << "Hit! \n";
-						// Set them as inactive, will be killed later
-						projectile.active = false;
-						alien.active = false;
-						score += 100;
-					}
+				if (CheckCollisionRecs(player.rect, projectile.rect)) {
+					projectile.active = false;
+					alien.active = false;
+					score += 100;
 				}
 			}
 
-			//ENEMY PROJECTILES HERE
-			for (auto& projectile : Projectiles)
+			for (auto& projectile : enemyProjectiles)
 			{
-				if (projectile.type == EntityType::ENEMY_PROJECTILE)
-				{
-					if (CheckCollision({player.x_pos, GetScreenHeight() - player.player_base_height }, player.radius, projectile.lineStart, projectile.lineEnd))
-					{
-						std::cout << "dead!\n"; 
-						projectile.active = false;
-						player.lives -= 1; 
-					}
+				if (CheckCollisionRecs(player.rect, projectile.rect)) {
+					projectile.active = false;
+					player.lives -= 1;
 				}
 			}
-
 
 			for (auto& wall : walls.walls_vec)
 			{
-				if (CheckCollision(wall.position, wall.radius, projectile.lineStart, projectile.lineEnd))
-				{
-					// Kill!
-					std::cout << "Hit! \n";
-					// Set them as inactive, will be killed later
+				if (CheckCollisionRecs(player.rect, projectile.rect)) {
 					projectile.active = false;
 					wall.health -= 1;
 				}
 			}
 		}
 
-		//MAKE PROJECTILE
 		if (IsKeyPressed(KEY_SPACE))
 		{
-			const float window_height = static_cast<float>(GetScreenHeight());
+			const float window_height = static_cast<float>(GetScreenHeight()); // TODO: use narrow cast instead
 			const Vector2 projPos = { player.x_pos, window_height - 130};
-			const Projectile newProjectile(projPos, EntityType::PLAYER_PROJECTILE, 15);
-			Projectiles.push_back(newProjectile);
+			const PlayerProjectile newProjectile(projPos);
+			playerProjectiles.push_back(newProjectile);
 		}
 
-		//Aliens Shooting
 		shootTimer += 1;
 		if (shootTimer > 59) //once per second
 		{
@@ -238,100 +132,17 @@ void Game::Update()
 
 			Vector2 projPos = { Aliens[randomAlienIndex].position};
 			projPos.y += 40;
-			const Projectile newProjectile(projPos, EntityType::ENEMY_PROJECTILE, -15);
-			Projectiles.push_back(newProjectile);
+			const EnemyProjectile newProjectile(projPos);
+			enemyProjectiles.push_back(newProjectile);
 			shootTimer = 0;
 		}
 
-		// REMOVE INACTIVE/DEAD ENITITIES
-
-		std::erase_if(Projectiles, [](const auto& projectile) { return !projectile.active; });
+		std::erase_if(playerProjectiles, [](const auto& projectile) { return !projectile.active; });
+		std::erase_if(enemyProjectiles, [](const auto& projectile) { return !projectile.active; });
 
 		std::erase_if(Aliens, [](const auto& alien) { return !alien.active; });
 
 		std::erase_if(walls.walls_vec, [](const auto& wall) { return !wall.active; });
-			
-		
-
-	//break;
-	//case State::ENDSCREEN:
-	//	//Code
-	//
-	//	//Exit endscreen
-	//	if (IsKeyReleased(KEY_ENTER) && !newHighScore)
-	//	{
-	//		Continue();
-	//	}
-
-	//
-
-	//	if (newHighScore)
-	//	{
-	//		if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
-	//		else mouseOnText = false;
-
-	//		if (mouseOnText)
-	//		{
-	//			// Set the window's cursor to the I-Beam
-	//			SetMouseCursor(MOUSE_CURSOR_IBEAM);
-
-	//			// Get char pressed on the queue
-	//			int key = GetCharPressed();
-
-	//			// Check if more characters have been pressed on the same frame
-	//			while (key > 0)
-	//			{
-	//				// NOTE: Only allow keys in range [32..125]
-	//				if ((key >= 32) && (key <= 125) && (letterCount < 9))
-	//				{
-	//					name[letterCount] = (char)key;
-	//					name[letterCount + 1] = '\0'; // Add null terminator at the end of the string.
-	//					letterCount++;
-	//				}
-
-	//				key = GetCharPressed();  // Check next character in the queue
-	//			}
-
-	//			//Remove chars 
-	//			if (IsKeyPressed(KEY_BACKSPACE))
-	//			{
-	//				letterCount--;
-	//				if (letterCount < 0) letterCount = 0;
-	//				name[letterCount] = '\0';
-	//			}
-	//		}
-	//		else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
-
-	//		if (mouseOnText)
-	//		{
-	//			framesCounter++;
-	//		}
-	//		else
-	//		{
-	//			framesCounter = 0;
-	//		}
-
-	//		// If the name is right legth and enter is pressed, exit screen by setting highscore to false and add 
-	//		// name + score to scoreboard
-	//		if (letterCount > 0 && letterCount < 9 && IsKeyReleased(KEY_ENTER))
-	//		{
-	//			std::string nameEntry(name);
-
-	//			InsertNewHighScore(nameEntry);
-
-	//			newHighScore = false;
-	//		}
-
-
-	//	}
-	//	
-
-
-	//	break;
-	//default:
-	//	//SHOULD NOT HAPPEN
-	//	break;
-	//}
 }
 
 /* TODO: Move the draw functions built into raylib here
@@ -343,614 +154,49 @@ void Game::Render()
 {
 	Drawer drawer;
 
-	//switch (gameState)
-	//{
-	//case State::STARTSCREEN:
-	//	//Code
-	//	DrawText("SPACE INVADERS", 200, 100, 160, YELLOW);
-
-	//	DrawText("PRESS SPACE TO BEGIN", 200, 350, 40, YELLOW);
-	//	break;
-	//case State::GAMEPLAY:
-		//Code
-
-		//background render LEAVE THIS AT TOP
-		background.Render();
-
-		DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
-		DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
-
-		//player rendering 
-		player.Render(resources.shipTextures.GetTexture()[player.activeTexture]);
-
-		//projectile rendering
-		for (auto& projectile : Projectiles)
-		{
-			projectile.Render(resources.laserTexture.GetTexture());
-		}
-
-		// wall rendering 
-		for (auto& wall : walls.walls_vec)
-		{
-			wall.Render(resources.barrierTexture.GetTexture());
-		}
-
-		//alien rendering  
-		for (auto& alien : Aliens)
-		{
-			alien.Render(resources.alienTexture.GetTexture());
-		}
-
-
-
-
-
-
-	//	break;
-	//case State::ENDSCREEN:
-	//	//Code
-	//	if (newHighScore)
-	//	{
-	//		DrawText("NEW HIGHSCORE!", 600, 300, 60, YELLOW);
-
-	//		// BELOW CODE IS FOR NAME INPUT RENDER
-	//		DrawText("PLACE MOUSE OVER INPUT BOX!", 600, 400, 20, YELLOW);
-
-	//		DrawRectangleRec(textBox, LIGHTGRAY);
-	//		if (mouseOnText)
-	//		{
-	//			// HOVER CONFIRMIATION
-	//			DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
-	//		}
-	//		else
-	//		{
-	//			DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
-	//		}
-
-	//		//Draw the name being typed out
-	//		DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 40, MAROON);
-
-	//		//Draw the text explaining how many characters are used
-	//		DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, 8), 600, 600, 20, YELLOW);
-
-	//		if (mouseOnText)
-	//		{
-	//			if (letterCount < 9)
-	//			{
-	//				// Draw blinking underscore char
-	//				if (((framesCounter / 20) % 2) == 0)
-	//				{
-	//					DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, MAROON);
-	//				}
-
-	//			}
-	//			else
-	//			{
-	//				//Name needs to be shorter
-	//				DrawText("Press BACKSPACE to delete chars...", 600, 650, 20, YELLOW);
-	//			}
-	//			
-	//		}
-
-	//		// Explain how to continue when name is input
-	//		if (letterCount > 0 && letterCount < 9)
-	//		{
-	//			DrawText("PRESS ENTER TO CONTINUE", 600, 800, 40, YELLOW);
-	//		}
-
-	//	}
-	//	else {
-	//		// If no highscore or name is entered, show scoreboard and call it a day
-	//		DrawText("PRESS ENTER TO CONTINUE", 600, 200, 40, YELLOW);
-
-	//		DrawText("LEADERBOARD", 50, 100, 40, YELLOW);
-
-	//		int nameOffset = 0;
-	//		for (auto& name : Leaderboard)
-	//		{
-	//			++nameOffset;
-	//			DrawText(name.name.data(), 50, 140 + (nameOffset * 40), 40, YELLOW);
-	//			DrawText(TextFormat("%i", name.score), 350, 140 + (nameOffset * 40), 40, YELLOW);
-	//		}
-	//	}
-
-	//	
-
-
-	//	break;
-	//default:
-	//	//SHOULD NOT HAPPEN
-	//	break;
-	//}
+	background.Render();
+	
+	DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
+	DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
+	
+	//player rendering 
+	player.Render(resources.shipTexture.GetTexture());
+	
+	//projectile rendering
+	for (auto& projectile : playerProjectiles)
+	{
+		projectile.Render(resources.laserTexture.GetTexture());
+	}
+	
+	for (auto& projectile : enemyProjectiles)
+	{
+		projectile.Render(resources.laserTexture.GetTexture());
+	}
+	
+	// wall rendering 
+	for (auto& wall : walls.walls_vec)
+	{
+		wall.Render(resources.barrierTexture.GetTexture());
+	}
+	
+	//alien rendering  
+	for (auto& alien : Aliens)
+	{
+		alien.Render(resources.alienTexture.GetTexture());
+	}
 }
 
 /* TODO: Make for loops into ranged for loops
 * Make alien an construction
+* maybe put in alien.h
 */
 void Game::SpawnAliens()
 {
 	for (const int& row : std::views::iota(0, formationHeight)) {
 		for (const int& col : std::views::iota(0, formationHeight)) {
-			const Vector2 alienPos = { formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) };
-			const Alien newAlien(alienPos);
+			Vector2 alienPos = { formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) };
+			Alien newAlien(alienPos);
 			Aliens.push_back(newAlien);
 		}
 	}
-
 }
-
-//bool Game::CheckNewHighScore()
-//{
-//	if (score > Leaderboard[4].score)
-//	{
-//		return true;
-//	}
-//
-//	return false;
-//}
-//
-///* TODO: Make playerdata an construction
-//* Make for loop ranged for loop
-//*/
-//void Game::InsertNewHighScore(std::string name)
-//{
-//	PlayerData newData;
-//	newData.name = name;
-//	newData.score = score;
-//
-//	for (int i = 0; i < Leaderboard.size(); i++)
-//	{
-//		if (newData.score > Leaderboard[i].score)
-//		{
-//
-//			Leaderboard.insert(Leaderboard.begin() + i, newData);
-//
-//			Leaderboard.pop_back();
-//
-//			i = Leaderboard.size();
-//
-//		}
-//	}
-//}
-//
-///* TODO: Maybe make functional
-//*/
-//void Game::LoadLeaderboard()
-//{
-//	// CLEAR LEADERBOARD
-//
-//	// OPEN FILE
-//
-//	// READ DATA
-//
-//	// WRITE DATA ONTO LEADERBOARD
-//
-//	//CLOSE FILE
-//}
-//
-//void Game::SaveLeaderboard()
-//{
-//	// SAVE LEADERBOARD AS ARRAY
-//
-//	// OPEN FILE
-//	std::fstream file;
-//
-//	file.open("Leaderboard");
-//
-//	if (!file)
-//	{
-//		std::cout << "file not found \n";
-//
-//	}
-//	else
-//	{
-//		std::cout << "file found \n";
-//	}
-//	// CLEAR FILE
-//
-//	// WRITE ARRAY DATA INTO FILE
-//
-//	// CLOSE FILE
-//}
-
-
-/* TODO: Might be a costly way to check collisions that might be easier to do in different way
-*/
-bool Game::CheckCollision(Vector2 circlePos, float circleRadius, Vector2 lineStart, Vector2 lineEnd)
-{
-	// our objective is to calculate the distance between the closest point on the line to the centre of the circle, 
-	// and determine if it is shorter than the radius.
-
-	// check if either edge of line is within circle
-	if (pointInCircle(circlePos, circleRadius, lineStart) || pointInCircle(circlePos, circleRadius, lineEnd))
-	{
-		return true;
-	}
-
-	// simplify variables
-	Vector2 A = lineStart;
-	Vector2 B = lineEnd;
-	Vector2 C = circlePos;
-
-	// calculate the length of the line
-	float length = lineLength(A, B);
-	
-	// calculate the dot product
-	float dotP = (((C.x - A.x) * (B.x - A.x)) + ((C.y - A.y) * (B.y - A.y))) / pow(length, 2);
-
-	// use dot product to find closest point
-	float closestX = A.x + (dotP * (B.x - A.x));
-	float closestY = A.y + (dotP * (B.y - A.y));
-
-	//find out if coordinates are on the line.
-	// we do this by comparing the distance of the dot to the edges, with two vectors
-	// if the distance of the vectors combined is the same as the length the point is on the line
-
-	//since we are using floating points, we will allow the distance to be slightly innaccurate to create a smoother collision
-	float buffer = 0.1;
-
-	float closeToStart = lineLength(A, { closestX, closestY }); //closestX + Y compared to line Start
-	float closeToEnd = lineLength(B, { closestX, closestY });	//closestX + Y compared to line End
-
-	float closestLength = closeToStart + closeToEnd;
-
-	if (closestLength == length + buffer || closestLength == length - buffer)
-	{
-		//Point is on the line!
-
-		//Compare length between closest point and circle centre with circle radius
-
-		float closeToCentre = lineLength(A, { closestX, closestY }); //closestX + Y compared to circle centre
-
-		if (closeToCentre < circleRadius)
-		{
-			//Line is colliding with circle!
-			return true;
-		}
-		else
-		{
-			//Line is not colliding
-			return false;
-		}
-	}
-	else
-	{
-		// Point is not on the line, line is not colliding
-		return false;
-	}
-
-}
-
-
-
-Player::Player() noexcept
-	: x_pos(static_cast<float>(GetScreenWidth()) / 2)
-	, speed(7)
-	, player_base_height(70.0f)
-	, radius(50.0f)
-	, lives(3)
-	, direction(0)
-	, activeTexture(0)
-	, timer(0)
-	, type(EntityType::PLAYER)
-{
-}
-
-/* TODO: Probably possible to simplify the movement further
-* Look into if the timer stuff does anything and either make it work or delete
-*/
-void Player::Update() 
-{
-
-	//Movement
-	direction = 0;
-	if (IsKeyDown(KEY_LEFT))
-	{
-		direction--;
-	}
-	if (IsKeyDown(KEY_RIGHT))
-	{
-		direction++;
-	}
-
-	x_pos += speed * direction;
-
-	if (x_pos < 0 + radius)
-	{
-		x_pos = 0 + radius;
-	}
-	else if (x_pos > GetScreenWidth() - radius)
-	{
-		x_pos = GetScreenWidth() - radius;
-	}
-
-
-	//Determine frame for animation
-	timer += GetFrameTime();
-
-	if (timer > 0.4 && activeTexture == 2)
-	{
-		activeTexture = 0;
-		timer = 0;
-	}
-	else if (timer > 0.4)
-	{
-		activeTexture++;
-		timer = 0;
-	}
-
-	
-}
-
-/* TODO: Make rectangles for the texture drawing
-* Make const and probably noexcept as the texture error handling should be done during construction
-*/
-void Player::Render(Texture2D texture) 
-{
-	float window_height = GetScreenHeight(); 
-	//DrawTexture(texture, WHITE); 
-
-	DrawTexturePro(texture, //TODO: just scale the source image down and use the simpler DrawTexture, instead of scaling them every single frame
-		{
-			0,
-			0,
-			352,
-			352,
-		},
-		{
-			x_pos, window_height - player_base_height,
-			100,
-			100,
-		}, { 50, 50 },
-		0,
-		WHITE);
-}
-
-
-
-Projectile::Projectile(Vector2 pos, EntityType type, int speed)
-	: position(pos)
-	, active(true)
-	, speed(speed)
-	, type(type)
-{
-}
-
-void Projectile::Update()
-{
-	position.y -= speed;
-
-	// UPDATE LINE POSITION
-	lineStart.y = position.y - 15;
-	lineEnd.y   = position.y + 15;
-
-	lineStart.x = position.x;
-	lineEnd.x   = position.x;
-
-	if (position.y < 0 || position.y > 1500)
-	{
-		active = false;
-	}
-}
-
-/* TODO: Make rectangles here aswell
-* Make const and probably noexcept because the texture error handling should be done during construction
-*/
-
-void Projectile::Render(Texture2D texture)
-{
-	//DrawCircle((int)position.x, (int)position.y, 10, RED);
-	DrawTexturePro(texture,
-		{
-			0,
-			0,
-			176,
-			176,
-		},
-		{
-			position.x,
-			position.y,
-			50,
-			50,
-		}, { 25 , 25 },
-		0,
-		WHITE);
-}
-
-/* TODO: Make rectangles here aswell
-* Make const and probably noexcept because the texture error handling should be done during construction
-*/
-
-
-
-Walls::Walls(int wallCount) noexcept
-	: wallCount(wallCount)
-	, wall_y_offset(250)
-{
-	const float window_width = static_cast<float>(GetScreenWidth());
-	const float window_height = static_cast<float>(GetScreenHeight());
-	const float wall_distance = window_width / (wallCount + 1);
-
-	for (const int i : std::views::iota(0, wallCount)) {		 
-		walls_vec.emplace_back(wall_distance * (i + 1), window_height - wall_y_offset);
-	}
-}
-
-Wall::Wall(float x, float y) noexcept
-	: health(50)
-	, radius(60)
-	, active(true)
-	, position({ x,y })
-{
-
-}
-
-void Wall::Render(Texture2D texture)
-{
-	DrawTexturePro(texture,
-		{
-			0,
-			0,
-			704,
-			704,
-		},
-		{
-			position.x,
-			position.y,
-			200,
-			200,
-		}, { 100 , 100 },
-		0,
-		WHITE);
-
-
-	DrawText(TextFormat("%i", health), position.x-21, position.y+10, 40, RED);
-	
-}
-
-void Wall::Update() 
-{
-
-	// set walls as inactive when out of health
-	if (health < 1)
-	{
-		active = false;
-	}
-
-
-}
-
-/* TODO: can probably be simplified with speed merely becoming minus or plus depending on if they hit the wall
-* 
-*/
-
-Alien::Alien(Vector2 pos) 
-	: position(pos)
-	, radius(30)
-	, active(true)
-	, moveRight(true)
-	, type(EntityType::ENEMY)
-	, speed(2)
-{
-}
-
-void Alien::Update()
-{
-	int window_width = GetScreenWidth(); 
-
-	if (moveRight)
-	{
-		position.x += speed; 
-
-		if (position.x >= GetScreenWidth())
-		{
-			moveRight = false; 
-			position.y += 50; 
-		}
-	}
-	else 
-	{
-		position.x -= speed; 
-
-		if (position.x <= 0)
-		{
-			moveRight = true; 
-			position.y += 50; 
-		}
-	}
-}
-
-/* TODO: Make rectangles here aswell
-* Make const and probably noexcept because the texture error handling should be done during construction
-*/
-
-void Alien::Render(Texture2D texture) 
-{
-	//DrawRectangle((int)position.x - 25, (int)position.y, 30, 30, RED);
-	//DrawCircle((int)position.x, (int)position.y, radius, GREEN);
-	
-	
-
-	DrawTexturePro(texture,
-		{
-			0,
-			0,
-			352,
-			352,
-		},
-		{
-			position.x,
-			position.y,
-			100,
-			100,
-		}, {50 , 50},
-		0,
-		WHITE);
-}
-
-
-Star::Star(Vector2 pos, float size) 
-	: position(pos)
-	, size(size)
-	, color(SKYBLUE)
-{
-
-}
-
-//BACKGROUND
-void Star::Update(float starOffset)
-{
-	position.x = initPosition.x + starOffset;
-	position.y = initPosition.y;
-
-}
-
-/* TODO: Make rectangles here aswell
-* Make const and probably noexcept because the texture error handling should be done during construction
-*/
-
-void Star::Render()
-{
-	DrawCircle((int)position.x, (int)position.y, size, color);
-}
-
-/* TODO: construct instead of initialization
-* Make a func in the game construction
-*/
-
-Background::Background(int starAmount)
-{
-	for (const int i : std::views::iota(0, starAmount))
-	{
-		const Vector2 pos = { GetRandomValue(-150, GetScreenWidth() + 150) , GetRandomValue(0, GetScreenHeight()) };
-		const Star newStar(pos, GetRandomValue(1, 4) / 2);
-
-		Stars.push_back(newStar);
-	}
-}
-
-/* TODO: Make for loop ranged for
-* Maybe make const or noexcept
-*/
-
-void Background::Update(float offset)
-{
-	for (int i = 0; i < Stars.size(); i++)
-	{
-		Stars[i].Update(offset);
-	}
-	
-}
-
-/* TODO: Make const and noexcept
-* Make for loop ranged for loop
-*/
-
-void Background::Render()
-{
-	for (int i = 0; i < Stars.size(); i++)
-	{
-		Stars[i].Render();
-	}
-}
-

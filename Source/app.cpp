@@ -26,6 +26,7 @@ void App::Update() {
 		if (start_menu.start_game == true) {
 			start_menu.start_game = false;
 			state = gameState::Ingame;
+			
 		}
 		break;
 	case App::gameState::Ingame:

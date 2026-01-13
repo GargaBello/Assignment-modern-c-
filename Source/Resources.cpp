@@ -11,41 +11,11 @@ make constructor take a argument to not make it a default constructor
 */
 
 
-//TODO: A RAII type only ever handles ONE resource. 
-//TODO: then you build containers / sets / aggregates / collections out of those RAII handles. 
-ShipTexture::ShipTexture()
-{
-	shipTextures.push_back(LoadTexture("./Assets/Ship1.png"));
-	shipTextures.push_back(LoadTexture("./Assets/Ship2.png"));
-	shipTextures.push_back(LoadTexture("./Assets/Ship3.png"));
-
-	int posInVec = 0;
-	for (auto& texture : shipTextures) {
-		++posInVec;
-		if (texture.id == 0) {
-			throw std::runtime_error("Failed to load texture: ShipTexture" + std::to_string(posInVec));
-		}
-	}
-}
-
-ShipTexture::~ShipTexture() {
-	for (auto& textures : shipTextures) {
-		UnloadTexture(textures);
-	}
-
-	shipTextures.clear();
-}
-
-std::vector<Texture2D> ShipTexture::GetTexture()
-{
-	return shipTextures;
-}
-
 TextureHandler::TextureHandler(std::string_view path) :
 	texture(LoadTexture(path.data()))
 {
 	if (texture.id == 0) {
-		throw std::runtime_error("Failed to load texture: " + std::string(path));
+		throw std::runtime_error(std::string("Failed to load texture: ") + std::string(path));
 	}
 }
 
@@ -56,6 +26,10 @@ TextureHandler::~TextureHandler() {
 Texture2D TextureHandler::GetTexture() {
 	return texture;
 }
+
+//TODO: A RAII type only ever handles ONE resource. 
+//TODO: then you build containers / sets / aggregates / collections out of those RAII handles. 
+
 
 Window::Window() noexcept
 {

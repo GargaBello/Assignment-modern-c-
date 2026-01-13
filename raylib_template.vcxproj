@@ -81,7 +81,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir)External\raylib\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)External\raylib\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)External\raylib\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)External\GSL-main\include;</IncludePath>
     <IntDir>Build\Intermediate\$(Configuration)\</IntDir>
     <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -177,13 +177,18 @@
     <ClCompile Include="Source\start_menu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="player.h" />
+    <ClInclude Include="Projectiles.h" />
+    <ClInclude Include="Source\alien.h" />
     <ClInclude Include="Source\app.h" />
+    <ClInclude Include="Source\background.h" />
     <ClInclude Include="Source\end_menu.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\Leaderboard.h" />
     <ClInclude Include="Source\level.h" />
     <ClInclude Include="Source\Resources.h" />
     <ClInclude Include="Source\start_menu.h" />
+    <ClInclude Include="walls.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

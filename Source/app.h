@@ -8,11 +8,12 @@
 
 
 struct App {
+	Window window;
 	StartMenu start_menu;
 	EndMenu end_menu;
 	Game game;
 	LeaderBoard leaderboard;
-	Window window;
+	
 
 	enum class gameState {
 		Start,

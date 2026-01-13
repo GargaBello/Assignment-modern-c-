@@ -4,6 +4,8 @@
 #include <string_view>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <ranges>
 
 struct PlayerData
 {

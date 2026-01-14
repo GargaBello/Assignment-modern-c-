@@ -37,9 +37,9 @@ public:
 class Window {
 private:
 	// Todo: Make arguments to pass in
-	const int windowHeight = 1080;
-	const int windowWidth = 1920;
-	std::string_view title = "Space invaders";
+	const int windowHeight = 1080;					// TODO Should just be static constexpr
+	const int windowWidth = 1920;					//
+	std::string_view title = "Space invaders";		//
 public:
 
 	Window() noexcept;
@@ -79,7 +79,7 @@ struct Resources
 		: alienTexture("./Assets/Alien.png")
 		, barrierTexture("./Assets/Barrier.png")
 		, laserTexture("./Assets/Laser.png")
-		, shipTexture("./Assets/Ship2.png")
+		, shipTexture("./Assets/Ship2.png")			// TODO Make sure order HERE matches variable declaration above... for clarity
 	{
 	}
 };

@@ -1,12 +1,7 @@
 #include "game.h"
 
-/* TODO: Change iskeyreleased to iskeypressed
-*/
-
 void Game::Update()
 {
-
-
 		player.Update();
 		
 		for (auto& alien : aliens.GetVector())

@@ -25,7 +25,7 @@ public:
 
 	bool CheckNewHighScore(int score) const noexcept;
 
-	void InsertNewHighScore(std::string name, int score);
+	void InsertNewHighScore(std::string name, int score) noexcept;
 
 	LeaderBoard() {
 		if (CheckNewHighScore(playerScore.score)) {

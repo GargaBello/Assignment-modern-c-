@@ -19,7 +19,7 @@ struct Background
 {
 private:
 	std::vector<Star> Stars{};
-	int star_amount = 600;
+	int star_amount = 600;			// TODO should be static constexpr
 
 public:
 

@@ -8,7 +8,7 @@ struct Alien
 {
 private:
 	Vector2 position{};
-	float radius = 100.0f; 
+	float radius = 100.0f;								// TODO Should be static constexpr
 	bool active = true;
 	int speed = 2;
 	static constexpr int player_spawn_offset = 200;
@@ -46,9 +46,9 @@ public:
 	void Update() noexcept {
 		position.x += speed;
 
-		if (position.x >= GetScreenWidth())
+		if (position.x >= GetScreenWidth()) // Combine with else{} below
 		{
-			speed = -2;
+			speed *= -1;					// TODO This
 			position.y += 50;
 			rect.y = position.y;
 		}
@@ -71,6 +71,7 @@ struct Aliens {
 private:
 	std::vector<Alien> aliens{};
 
+	// TODO Make static constexpr
 	int formationWidth = 8;
 	int formationHeight = 5;
 	float alienSpacing = 80;
@@ -90,7 +91,7 @@ public:
 		std::erase_if(aliens, [](const Alien& alien) {return !alien.GetActive(); });
 	}
 
-	template <typename T>
+	template <typename T>	// TODO Move to cpp file unless another file actually needs it... and if so, make it a sepparate file (it's unrelated to Aliens)
 	T& GetRandomElement(std::vector<T>& v, std::mt19937& rng) {
 		if (v.empty()) throw std::runtime_error("Cannot get random element from empty vector");
 		std::uniform_int_distribution<std::size_t> dist(0, v.size() - 1);

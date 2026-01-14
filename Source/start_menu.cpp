@@ -1,9 +1,5 @@
 #include "start_menu.h"
 
-/* TODO: Make work
-* 
-*/
-
 void StartMenu::Update() noexcept{
 	if (IsKeyReleased(KEY_SPACE))
 	{

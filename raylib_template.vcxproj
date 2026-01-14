@@ -173,6 +173,7 @@
     <ClCompile Include="Source\Leaderboard.cpp" />
     <ClCompile Include="Source\level.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\PlayerScore.cpp" />
     <ClCompile Include="Source\Resources.cpp" />
     <ClCompile Include="Source\start_menu.cpp" />
   </ItemGroup>
@@ -186,6 +187,7 @@
     <ClInclude Include="Source\Leaderboard.h" />
     <ClInclude Include="Source\level.h" />
     <ClInclude Include="Source\player.h" />
+    <ClInclude Include="Source\playerScore.h" />
     <ClInclude Include="Source\Resources.h" />
     <ClInclude Include="Source\start_menu.h" />
     <ClInclude Include="Source\walls.h" />

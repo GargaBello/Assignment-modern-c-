@@ -5,18 +5,12 @@ bool LeaderBoard::CheckNewHighScore(int score) const noexcept {
 }
 
 void LeaderBoard::InsertNewHighScore(std::string name, int score) {
-	PlayerData newData;
-	Leaderboard.push_back(newData);
+	Leaderboard.emplace_back(name, score);
 	std::ranges::sort(Leaderboard, std::ranges::greater{}, &PlayerData::score);
 	Leaderboard.pop_back();
-	
-	//consider: 
-	// push_back the new value
-	// sort the vector
-	// if the vector is too long, pop_back
 }
 
-std::vector<PlayerData> LeaderBoard::GetLeaderboard()
+std::vector<PlayerData> LeaderBoard::GetLeaderboard() const noexcept
 {
 	return Leaderboard;
 }

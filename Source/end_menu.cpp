@@ -1,10 +1,15 @@
 #include "end_menu.h"
-#include <string>
 
-/* TODO: make work
-*/
+bool EndMenu::isValidCharacter(int key) noexcept
+{
+	if ((key > 31) && (key < 125)) {
+		return true;
+	}
+	return false;
+}
 
-void EndMenu::Update() {
+void EndMenu::Update() noexcept {
+
 	if (IsKeyReleased(KEY_ENTER) && !Leaderboard.newHighScore)
 	{
 		restartGame = true;
@@ -15,23 +20,17 @@ void EndMenu::Update() {
 		if (CheckCollisionPointRec(GetMousePosition(), box.textBox)) box.mouseOnText = true;
 		else box.mouseOnText = false;
 
-		if (box.mouseOnText) //TODO: invert the tests and reduce nesting.
+		if (box.mouseOnText)
 		{ 
 			SetMouseCursor(MOUSE_CURSOR_IBEAM);
 
 			int key = GetCharPressed();
 
-			while (key > 0)
+			if (isValidCharacter(key))
 			{
-				if ((key > 31) && (key <= 125) && (box.letterCount < 9)) //TODO: simplify tests, make them say what they're asking. "isValidCharacter()"
-				{
-					box.name.push_back( (char)key);
-				}
-
-				key = GetCharPressed();  // Check next character in the queue
+				box.name.push_back(gsl::narrow_cast<char>(key));
 			}
 
-			//Remove chars 
 			if (IsKeyPressed(KEY_BACKSPACE))
 			{
 				box.name.pop_back();
@@ -48,22 +47,15 @@ void EndMenu::Update() {
 			box.framesCounter = 0;
 		}
 
-		// If the name is right legth and enter is pressed, exit screen by setting highscore to false and add 
-		// name + score to scoreboard
-		if (box.letterCount > 0 && box.letterCount < 9 && IsKeyReleased(KEY_ENTER))
+		if (IsKeyReleased(KEY_ENTER))
 		{
-			std::string nameEntry(box.name);
-
-			Leaderboard.InsertNewHighScore(nameEntry, 0); //TODO: Fill in real score later
-
+			Leaderboard.InsertNewHighScore(box.name, playerScore.score);
 			Leaderboard.newHighScore = false;
 		}
-
-
 	}
 }
 
-void EndMenu::Render() noexcept {
+void EndMenu::Render() const noexcept {
 	if (Leaderboard.newHighScore)
 	{
 		DrawText("NEW HIGHSCORE!", 600, 300, 60, YELLOW);
@@ -76,27 +68,22 @@ void EndMenu::Render() noexcept {
 			DrawRectangleLinesEx(box.textBox, 2, RED);
 			if (((box.framesCounter / 20) % 2) == 0)
 			{
-				DrawText("_", (int)box.textBox.x + 8 + MeasureText(box.name.data(), 40), (int)box.textBox.y + 12, 40, MAROON);
+				DrawText("_", gsl::narrow_cast<int>(box.textBox.x + 8 + MeasureText(box.name.data(), 40)), gsl::narrow_cast<int>(box.textBox.y + 12), 40, MAROON);
 			}
 		}
 		else
 		{
-			//DrawRectangleLines((int)box.textBox.x, (int)box.textBox.y, (int)box.textBox.width, (int)box.textBox.height, DARKGRAY);
 			DrawRectangleLinesEx(box.textBox, 3, DARKGRAY);
 		}
 
-		//Draw the name being typed out
-		//DrawText(box.name.data(), (int)box.textBox.x + 5, (int)box.textBox.y + 8, 40, MAROON);
-		DrawTextEx(box.font, box.name.data(), { box.textBox.x + 5, box.textBox.y + 8 }, 40, 5, MAROON);
+		DrawText(box.name.data(), gsl::narrow_cast<int>(box.textBox.x + 5), gsl::narrow_cast<int>(box.textBox.y + 8), 40, MAROON);
 
 		if (!box.name.size() == 0)
 		{
 			DrawText("PRESS ENTER TO CONTINUE", 600, 800, 40, YELLOW);
 		}
-
 	}
 	else {
-		// If no highscore or name is entered, show scoreboard and call it a day
 		DrawText("PRESS ENTER TO CONTINUE", 600, 200, 40, YELLOW);
 
 		DrawText("LEADERBOARD", 50, 100, 40, YELLOW);

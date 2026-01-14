@@ -7,17 +7,17 @@
 #include "background.h"
 #include "Projectiles.h"
 #include "Leaderboard.h"
+#include "playerScore.h"
 #include <vector>
 #include <string>
 #include <ranges>
 #include <algorithm>
 #include <print>
+#include <random>
 
 struct Game
 {
 	float shootTimer = 0;
-
-	void End();
 
 	void Update();
 	void Render() const noexcept;
@@ -38,4 +38,6 @@ struct Game
 	Background background;
 
 	Aliens aliens;
+
+	
 };

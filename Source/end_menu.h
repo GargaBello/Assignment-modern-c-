@@ -2,6 +2,9 @@
 
 #include "raylib.h"
 #include "Leaderboard.h"
+#include "playerScore.h"
+#include "gsl/algorithm"
+#include <string>
 
 struct EndMenu {
 
@@ -10,7 +13,7 @@ struct EndMenu {
 	PlayerData leaderboardData;
 	bool restartGame = false;
 
-	void Render() noexcept;
-
-	void Update();
+	bool isValidCharacter(int key) noexcept;
+	void Render() const noexcept;
+	void Update() noexcept;
 };

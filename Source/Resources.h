@@ -70,8 +70,6 @@ public:
 
 struct Resources
 {
-
-	//TODO: move into each of the entities
 	TextureHandler shipTexture;
 	TextureHandler alienTexture;
 	TextureHandler barrierTexture;

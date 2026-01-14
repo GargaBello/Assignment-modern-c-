@@ -1,49 +1,21 @@
 #include "game.h"
-#include <iostream>
-#include <vector>
-#include <chrono>
-#include <thread>
-#include <fstream>
-
-/* TODO: maybe make into destructor
-* Refactor away, find new way to restar game, probably reconstruct the game 
-*/
-
-void Game::End()
-{
-	playerProjectiles.clear();
-	enemyProjectiles.clear();
-	walls.walls_vec.clear();
-	aliens.aliens.clear();
-}
 
 /* TODO: Change iskeyreleased to iskeypressed
-* Signal that q ends the game or make it escape
-* Change all for loop to ranged for loop
-* Invert the collision checking or make it less nested
-* Maybe make the collision check a template free function that can check both types of projectiles
-* Make projectile creation a construction instead of two step initialisation
-* Look into the erasing of entities and see if there is a better way
-* Probly change the way the name in the highscore is put in and especially make it string or string_view
-* Split function into start menu, game screen and end menu and make leaderboard a separate class
 */
 
 void Game::Update()
 {
-		if (IsKeyReleased(KEY_Q))
-		{
-			End();
-		}
+
 
 		player.Update();
 		
-		for (auto& alien : aliens.aliens)
+		for (auto& alien : aliens.GetVector())
 		{
 			alien.Update(); 
 
-			if (alien.position.y > GetScreenHeight() - player.spawn_offset)
+			if (alien.GetPosition().y > player.GetPosition().y)
 			{
-				End();
+				player.lives = 0;
 			}
 		}
 
@@ -66,12 +38,12 @@ void Game::Update()
 
 		for (auto& projectile : playerProjectiles)
 		{
-			for (auto& alien : aliens.aliens)
+			for (auto& alien : aliens.GetVector())
 			{
-				if (CheckCollisionRecs(alien.rect, projectile.rect)) {
+				if (CheckCollisionRecs(alien.GetCollisionBox(), projectile.rect)) {
 					projectile.active = false;
-					alien.active = false;
-					leaderboardData.score += 100;
+					alien.SetActive(false);
+					playerScore.score += 100;
 				}
 			}
 
@@ -107,27 +79,18 @@ void Game::Update()
 		}
 
 		shootTimer += 1;
-		if (shootTimer > 59) //once per second
+		if (shootTimer > 59)
 		{
-			//TODO: Refactor random system
-
-			int randomAlienIndex = 0;
-
-			if (aliens.aliens.size() > 1)
-			{
-				randomAlienIndex = rand() % aliens.aliens.size();
-			}
-
-			Vector2 projPos = { aliens.aliens[randomAlienIndex].position};
-			projPos.y += 40;
-			const EnemyProjectile newProjectile(projPos);
-			enemyProjectiles.push_back(newProjectile);
+			std::mt19937 rng{ std::random_device{}() };
+			Alien& alien = aliens.GetRandomElement(aliens.GetVector(), rng);
+			constexpr int height_offset = 40;
+			enemyProjectiles.emplace_back(Vector2{ alien.GetPosition().x, alien.GetPosition().y + height_offset });
 			shootTimer = 0;
 		}
 
 		std::erase_if(playerProjectiles, [](const auto& projectile) { return !projectile.active; });
 		std::erase_if(enemyProjectiles, [](const auto& projectile) { return !projectile.active; });
-		std::erase_if(aliens.aliens, [](const auto& alien) { return !alien.active; });
+		aliens.RemoveInactive();
 		std::erase_if(walls.walls_vec, [](const auto& wall) { return !wall.active; });
 }
 
@@ -135,7 +98,7 @@ void Game::Render() const noexcept
 {
 	background.Render();
 	
-	DrawText(TextFormat("Score: %i", leaderboardData.score), 50, 20, 40, YELLOW);
+	DrawText(TextFormat("Score: %i", playerScore.score), 50, 20, 40, YELLOW);
 	DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 	
 	player.Render(resources.shipTexture.GetTexture());
@@ -155,7 +118,7 @@ void Game::Render() const noexcept
 		wall.Render(resources.barrierTexture.GetTexture());
 	}
 	
-	for (auto& alien : aliens.aliens)
+	for (auto& alien : aliens.GetVector())
 	{
 		alien.Render(resources.alienTexture.GetTexture());
 	}

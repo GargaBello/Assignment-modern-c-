@@ -1,16 +1,47 @@
 #pragma once
 #include "raylib.h"
 #include <vector>
+#include <random>
 #include "Resources.h"
 
 struct Alien
 {
+private:
 	Vector2 position{};
 	float radius = 100.0f; 
 	bool active = true;
 	int speed = 2;
+	static constexpr int player_spawn_offset = 200;
 
-	Rectangle rect = { position.x, position.y, radius, radius };
+	Rectangle rect = {};
+
+public:
+
+	explicit Alien(Vector2 pos) noexcept
+		: position(pos)
+		, rect{ pos.x, pos.y, radius, radius }
+	{
+	}
+
+	void SetActive(bool condition) noexcept {
+		active = condition;
+	}
+
+	bool& GetActive() noexcept {
+		return active;
+	}
+
+	const bool& GetActive() const noexcept {
+		return active;
+	}
+
+	Vector2& GetPosition() noexcept {
+		return position;
+	}
+
+	Rectangle& GetCollisionBox() noexcept{
+		return rect;
+	}
 
 	void Update() noexcept {
 		position.x += speed;
@@ -37,6 +68,7 @@ struct Alien
 };
 
 struct Aliens {
+private:
 	std::vector<Alien> aliens{};
 
 	int formationWidth = 8;
@@ -44,24 +76,40 @@ struct Aliens {
 	float alienSpacing = 80;
 	float formationX = 100;
 	float formationY = 50;
+public:
+
+	std::vector<Alien>& GetVector() noexcept {
+		return aliens;
+	}
+
+	const std::vector<Alien>& GetVector() const  noexcept {
+		return aliens;
+	}
+
+	void RemoveInactive() noexcept {
+		std::erase_if(aliens, [](const Alien& alien) {return !alien.GetActive(); });
+	}
+
+	template <typename T>
+	T& GetRandomElement(std::vector<T>& v, std::mt19937& rng) {
+		if (v.empty()) throw std::runtime_error("Cannot get random element from empty vector");
+		std::uniform_int_distribution<std::size_t> dist(0, v.size() - 1);
+		return v[dist(rng)];
+	}
 
 	Aliens() noexcept { // TODO: use other algo than iota
 		for (const int& row : std::views::iota(0, formationHeight)) {
 			for (const int& col : std::views::iota(0, formationHeight)) {
-				Vector2 alienPos = { formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) };
-				Alien newAlien(alienPos);
-				aliens.push_back(newAlien);
+				aliens.emplace_back(Vector2{ formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) });
 			}
 		}
 	}
 
-	void Update() {
+	void Update() noexcept {
 		if (aliens.size() < 1) {
 			for (const int& row : std::views::iota(0, formationHeight)) {
 				for (const int& col : std::views::iota(0, formationHeight)) {
-					Vector2 alienPos = { formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) };
-					Alien newAlien(alienPos);
-					aliens.push_back(newAlien);
+					aliens.emplace_back(Vector2{ formationX + 450 + (col * alienSpacing), formationY + (row * alienSpacing) });
 				}
 			}
 		}

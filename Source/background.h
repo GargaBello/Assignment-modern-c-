@@ -5,24 +5,23 @@
 
 struct Star
 {
+private:
 	Vector2 position = { gsl::narrow_cast<float>(GetRandomValue(-150, GetScreenWidth() + 150)) , gsl::narrow_cast<float>(GetRandomValue(0, GetScreenHeight())) };
 	float size = gsl::narrow_cast<float>(GetRandomValue(0, 4) / 2);
+public:
 
 	void Render() const noexcept {
 		DrawCircleV(position, size, SKYBLUE);
 	}
 };
 
-/* TODO: Make constructor
-*  Initialize in constructorm, not in separate function or
-	make initialize part of construction depending on how it looks
-*/
-
 struct Background
 {
+private:
 	std::vector<Star> Stars{};
-
 	int star_amount = 600;
+
+public:
 
 	Background() noexcept {
 		while (Stars.size() < star_amount) {
@@ -35,5 +34,5 @@ struct Background
 		{
 			star.Render();
 		}
-	}//todo: should be const and noexcept
+	}
 };

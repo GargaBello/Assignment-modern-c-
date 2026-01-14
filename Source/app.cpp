@@ -3,6 +3,7 @@
 void App::RestartGame()
 {
 	game = std::make_unique<Game>();
+	playerScore.score = 0;
 }
 
 void App::Render() {
@@ -38,6 +39,7 @@ void App::Update() {
 		game.get()->Update();
 		if (game.get()->player.lives <= 0) {
 			state = gameState::End;
+			end_menu.Leaderboard = LeaderBoard();
 		}
 		break;
 	case App::gameState::End:

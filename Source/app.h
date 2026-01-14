@@ -8,10 +8,10 @@
 
 
 struct App {
+private:
 	Window window;
 	StartMenu start_menu;
 	EndMenu end_menu;
-	//Game game;
 	std::unique_ptr<Game> game;
 	LeaderBoard leaderboard;
 	PlayerData leaderboardData;
@@ -29,9 +29,11 @@ struct App {
 
 	void Update();
 	void Render();
-	void Run();
 
-	App() {
+public:
+	App() noexcept {
 		game = std::make_unique<Game>();
 	}
+
+	void Run();
 };

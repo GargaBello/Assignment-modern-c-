@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raylib.h"
+#include "playerScore.h"
 #include <string_view>
 #include <string>
 #include <vector>
@@ -10,36 +11,38 @@
 struct PlayerData
 {
 	std::string name{};
-	int score = 0;
+	int score;
 
-	//PlayerData(std::string name);
 };
 
-class LeaderBoard {
+struct LeaderBoard {
 private:
-	std::vector<PlayerData> Leaderboard = {};
+	std::vector<PlayerData> Leaderboard = { PlayerData("Player 1", 500), PlayerData("Player 2", 400), PlayerData("Player 3", 300), PlayerData("Player 4", 200), PlayerData("Player 5", 100), };
+	
 public:
+
 	bool newHighScore = false;
 
 	bool CheckNewHighScore(int score) const noexcept;
 
 	void InsertNewHighScore(std::string name, int score);
 
-	std::vector<PlayerData> GetLeaderboard();
+	LeaderBoard() {
+		if (CheckNewHighScore(playerScore.score)) {
+			newHighScore = true;
+		}
+	}
 
-	LeaderBoard() = default;
+	std::vector<PlayerData> GetLeaderboard() const noexcept;
 };
 
 struct TextBox {
 	std::string name{};
-	int letterCount = 0;
 
 	Rectangle textBox = { 600, 500, 225, 50 };
 	bool mouseOnText = false;
 
 	int framesCounter = 0;
-
-	Font font;
 
 	TextBox() = default;
 };

@@ -15,6 +15,10 @@ struct Player {
 
 	Rectangle rect = { position.x, position.y, radius, radius };
 
+	Vector2 GetPosition() const noexcept {
+		return position;
+	}
+
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
 		DrawRectangleLinesEx(rect, 5, DARKPURPLE);

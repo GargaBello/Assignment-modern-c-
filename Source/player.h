@@ -8,7 +8,7 @@ struct Player {
 	float speed = 7;
 	float radius = 100.0f;
 	float timer = 0;
-	int spawn_offset = 200;
+	static constexpr int spawn_offset = 200;
 	int lives = 3;
 	int activeTexture = 0;
 

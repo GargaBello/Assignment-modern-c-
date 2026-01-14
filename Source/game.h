@@ -37,7 +37,7 @@ struct Game
 	std::vector<EnemyProjectile> enemyProjectiles{}; 
 	std::vector<PlayerProjectile> playerProjectiles{};
 
-	Wall wall;
+	//Wall wall;
 
 	Walls walls = Walls();
 

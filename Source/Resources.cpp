@@ -33,7 +33,8 @@ Texture2D TextureHandler::GetTexture() {
 
 Window::Window() noexcept
 {
-	InitWindow(windowWidth, windowHeight, title.data());
+	SetConfigFlags(FLAG_FULLSCREEN_MODE);
+	InitWindow(0, 0, title.data());
 }
 
 Window::~Window()
@@ -57,7 +58,7 @@ AudioDevice::~AudioDevice()
 	CloseAudioDevice();
 }
 
-Drawer::Drawer()
+Drawer::Drawer() 
 {
 	BeginDrawing();
 

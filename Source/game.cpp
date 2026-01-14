@@ -148,7 +148,7 @@ void Game::Render()
 	DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 	
 	player.Render(resources.shipTexture.GetTexture());
-	wall.Render(resources.barrierTexture.GetTexture());
+	//wall.Render(resources.barrierTexture.GetTexture());
 	
 	for (auto& projectile : playerProjectiles)
 	{

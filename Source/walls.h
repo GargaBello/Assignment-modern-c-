@@ -8,11 +8,14 @@ struct Wall
 	bool active = true;
 	int health = 50;
 	float width = 100.0f;
+	static constexpr int textOffsetX = 70;
+	static constexpr int textOffsetY = 100;
 
 	Rectangle rect = { position.x, position.y, width * 2, width };
 
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
+		DrawText(std::to_string(health).data(), gsl::narrow_cast<float>(position.x + textOffsetX), gsl::narrow_cast<float>(position.y + textOffsetY), 50, WHITE);
 		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	}
 
@@ -23,7 +26,7 @@ struct Wall
 		}
 
 		rect.x = position.x;
-		rect.y = position.y;
+		rect.y = position.y + textOffsetY;
 	}
 };
 

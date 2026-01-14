@@ -38,15 +38,6 @@ void EndMenu::Update() noexcept {
 		}
 		else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 
-		if (box.mouseOnText)
-		{
-			box.framesCounter++;
-		}
-		else
-		{
-			box.framesCounter = 0;
-		}
-
 		if (IsKeyReleased(KEY_ENTER))
 		{
 			Leaderboard.InsertNewHighScore(box.name, playerScore.score);
@@ -66,10 +57,7 @@ void EndMenu::Render() const noexcept {
 		if (box.mouseOnText)
 		{
 			DrawRectangleLinesEx(box.textBox, 2, RED);
-			if (((box.framesCounter / 20) % 2) == 0)
-			{
-				DrawText("_", gsl::narrow_cast<int>(box.textBox.x + 8 + MeasureText(box.name.data(), 40)), gsl::narrow_cast<int>(box.textBox.y + 12), 40, MAROON);
-			}
+			DrawText("_", gsl::narrow_cast<int>(box.textBox.x + 8 + MeasureText(box.name.data(), 40)), gsl::narrow_cast<int>(box.textBox.y + 12), 40, MAROON);
 		}
 		else
 		{

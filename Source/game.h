@@ -22,9 +22,6 @@ struct Game
 	void Update();
 	void Render() const noexcept;
 
-	//TODO: raylib has a rectangle interfection test. use it. Replace all custom collision logic with the library function, and make all entities adhere to the simple
-	// Rectangle getCollisionBox() const noexcept interface. 
-
 	Resources resources; //consider using RAII and just giving each type their own Resource handle. No reason to store those assets here in game. 
 
 	Player player;

@@ -20,12 +20,13 @@ const bool LeaderBoard::GetNewHighScore() const noexcept
 }
 
 bool LeaderBoard::CheckNewHighScore(int score) const noexcept {
-	return !Leaderboard.empty() && score > Leaderboard.back().score;
+	return !Leaderboard.empty() && score > Leaderboard.back().GetScore();
 }
 
-void LeaderBoard::InsertNewHighScore(std::string name, int score) noexcept {
+void LeaderBoard::InsertNewHighScore(std::string name, int score) {
 	Leaderboard.emplace_back(name, score);
-	std::ranges::sort(Leaderboard, std::ranges::greater{}, &PlayerData::score);
+	std::ranges::sort(Leaderboard, [](const PlayerData& a, const PlayerData& b) {
+		return a.GetScore() > b.GetScore(); });
 	Leaderboard.pop_back();
 }
 
@@ -39,6 +40,25 @@ LeaderBoard::LeaderBoard() noexcept
 const std::vector<PlayerData> LeaderBoard::GetLeaderboard() const noexcept
 {
 	return Leaderboard;
+}
+
+int& PlayerData::GetScore() noexcept {
+	return score;
+}
+
+const int& PlayerData::GetScore() const noexcept {
+	return score;
+}
+
+const std::string& PlayerData::GetName() const noexcept
+{
+	return name;
+}
+
+PlayerData::PlayerData(std::string name, int score) noexcept
+	: name(name)
+	, score(score)
+{
 }
 
 std::string& TextBox::GetName() noexcept

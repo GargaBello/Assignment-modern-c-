@@ -41,7 +41,6 @@ public:
 
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
-		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	} 
 
 	PlayerProjectile(Vector2 position) noexcept
@@ -90,7 +89,6 @@ public:
 
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
-		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	}
 
 	EnemyProjectile(Vector2 position) noexcept

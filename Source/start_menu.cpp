@@ -19,7 +19,8 @@ void StartMenu::SetStarGame(bool condition) noexcept
 }
 
 void StartMenu::Render() const noexcept {
-	DrawText("SPACE INVADERS", 200, 100, 160, YELLOW);
-
-	DrawText("PRESS SPACE TO BEGIN", 200, 350, 40, YELLOW);
+	static constexpr int X_pos = 200, Y_pos = 100, Thickness = 160;
+	DrawText("SPACE INVADERS", X_pos, Y_pos, Thickness, YELLOW);
+	static constexpr int Y_pos2 = 350, Thickness2 = 40;
+	DrawText("PRESS SPACE TO BEGIN", X_pos, Y_pos2, Thickness2, YELLOW);
 }

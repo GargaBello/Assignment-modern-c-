@@ -37,10 +37,10 @@ public:
 		return rect;
 	}
 
-	void Render(Texture2D texture) const {
+	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
-		DrawText(std::to_string(health).data(), gsl::narrow_cast<int>(position.x + textOffsetX), gsl::narrow_cast<int>(position.y + textOffsetY), 50, WHITE);
-		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
+		static constexpr int Thickness = 50;
+		DrawText(std::to_string(health).data(), gsl::narrow_cast<int>(position.x + textOffsetX), gsl::narrow_cast<int>(position.y + textOffsetY), Thickness, WHITE);
 	}
 
 	void Update() noexcept {

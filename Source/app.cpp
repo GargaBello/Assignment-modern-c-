@@ -1,6 +1,10 @@
 #include "app.h"
 #include "playerScore.h"
 
+App::App() {
+	game = std::make_unique<Game>();
+}
+
 void App::RestartGame()
 {
 	game = std::make_unique<Game>();

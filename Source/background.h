@@ -6,7 +6,11 @@
 class Star
 {
 private:
-	Vector2 position = { gsl::narrow_cast<float>(GetRandomValue(-150, GetScreenWidth() + 150)) , gsl::narrow_cast<float>(GetRandomValue(0, GetScreenHeight())) };
+	static constexpr int lower_x_pos_bounds = -150, upper_x_pos_bounds_offset = 150, lower_y_pos_bounds = 0;
+	
+	Vector2 position = { 
+		gsl::narrow_cast<float>(GetRandomValue(lower_x_pos_bounds, GetScreenWidth() + upper_x_pos_bounds_offset)), 
+		gsl::narrow_cast<float>(GetRandomValue(lower_y_pos_bounds, GetScreenHeight())) };
 	float size = gsl::narrow_cast<float>(GetRandomValue(0, 4) / 2);
 public:
 

@@ -21,13 +21,14 @@ void EndMenu::ResetLeaderBoard(LeaderBoard board) noexcept
 
 bool EndMenu::isValidCharacter(int key) noexcept
 {
-	if ((key > 31) && (key < 125)) {
+	static constexpr int lower_bound_of_keyboard_keys = 31, upper_bound_of_keyboard_keys = 125;
+	if ((key > lower_bound_of_keyboard_keys) && (key < upper_bound_of_keyboard_keys)) {
 		return true;
 	}
 	return false;
 }
 
-void EndMenu::Update() noexcept {
+void EndMenu::Update() {
 
 	if (IsKeyReleased(KEY_ENTER) && !Leaderboard.GetNewHighScore())
 	{
@@ -68,39 +69,52 @@ void EndMenu::Update() noexcept {
 void EndMenu::Render() const noexcept {
 	if (Leaderboard.GetNewHighScore())
 	{
-		DrawText("NEW HIGHSCORE!", 600, 300, 60, YELLOW);
-
-		DrawText("PLACE MOUSE OVER INPUT BOX!", 600, 400, 20, YELLOW);
+		static constexpr int X_pos = 600, Y_pos = 300, Thickness = 60;
+		DrawText("NEW HIGHSCORE!", X_pos, Y_pos, Thickness, YELLOW);
+		static constexpr int Y_pos2 = 400, Thickness2 = 20;
+		DrawText("PLACE MOUSE OVER INPUT BOX!", X_pos, Y_pos2, Thickness2, YELLOW);
 
 		DrawRectangleRec(box.GetRect(), LIGHTGRAY);
 		if (box.GetMouseOnText())
 		{
-			DrawRectangleLinesEx(box.GetRect(), 2, RED);
-			DrawText("_", gsl::narrow_cast<int>(box.GetRect().x + 8 + MeasureText(box.GetName().data(), 40)), gsl::narrow_cast<int>(box.GetRect().y + 12), 40, MAROON);
+			static constexpr int Thickness3 = 2;
+			DrawRectangleLinesEx(box.GetRect(), Thickness, RED);
+			static constexpr int X_pos_offset = 8, Thickness4 = 40, Y_pos_offset = 12;
+			DrawText("_", 
+				gsl::narrow_cast<int>(box.GetRect().x + X_pos_offset + MeasureText(box.GetName().data(), Thickness2)), 
+				gsl::narrow_cast<int>(box.GetRect().y + Y_pos_offset), 
+				Thickness2, 
+				MAROON);
 		}
 		else
 		{
-			DrawRectangleLinesEx(box.GetRect(), 3, DARKGRAY);
+			static constexpr int Thickness3 = 2;
+			DrawRectangleLinesEx(box.GetRect(), Thickness3, DARKGRAY);
 		}
 
-		DrawText(box.GetName().data(), gsl::narrow_cast<int>(box.GetRect().x + 5), gsl::narrow_cast<int>(box.GetRect().y + 8), 40, MAROON);
+		static constexpr int X_pos_offset = 5, Y_pos_offset = 8;
+		DrawText(box.GetName().data(), gsl::narrow_cast<int>(box.GetRect().x + X_pos_offset), gsl::narrow_cast<int>(box.GetRect().y + Y_pos_offset), Thickness, MAROON);
 
 		if (!box.GetName().size() == 0)
 		{
-			DrawText("PRESS ENTER TO CONTINUE", 600, 800, 40, YELLOW);
+			static constexpr int Y_pos3 = 800, Thickness4 = 40;
+			DrawText("PRESS ENTER TO CONTINUE", X_pos, Y_pos3, Thickness4, YELLOW);
 		}
 	}
 	else {
-		DrawText("PRESS ENTER TO CONTINUE", 600, 200, 40, YELLOW);
-
-		DrawText("LEADERBOARD", 50, 100, 40, YELLOW);
+		static constexpr int X_pos = 600, Y_pos = 200, Thickness = 40;
+		DrawText("PRESS ENTER TO CONTINUE", X_pos, Y_pos, Thickness, YELLOW);
+		static constexpr int X_pos2 = 50, Y_pos2 = 100;
+		DrawText("LEADERBOARD", X_pos2, Y_pos2, Thickness, YELLOW);
 
 		int nameOffset = 0;
 		for (auto& name : Leaderboard.GetLeaderboard())
 		{
 			++nameOffset;
-			DrawText(name.name.data(), 50, 140 + (nameOffset * 40), 40, YELLOW);
-			DrawText(TextFormat("%i", name.score), 350, 140 + (nameOffset * 40), 40, YELLOW);
+			static constexpr int Y_pos3 = 140, Y_pos_multiplier = 40;
+			DrawText(name.GetName().data(), X_pos2, Y_pos + (nameOffset * Y_pos_multiplier), Thickness, YELLOW);
+			static constexpr int X_pos3 = 350;
+			DrawText(TextFormat("%i", name.GetScore()), X_pos2, Y_pos3 + (nameOffset * Y_pos_multiplier), Thickness, YELLOW);
 		}
 	}
 }

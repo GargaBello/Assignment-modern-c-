@@ -6,7 +6,9 @@
 
 class App {	// TODO Make this, and all non-simple structs, into class (look up guidelines for why) C.2
 private:
-	Window window;
+	static constexpr int windowHeight = 1080, windowWidth = 1920;
+	static constexpr std::string_view title = "Space Invaders";
+	Window window =  Window(windowWidth, windowHeight, title);
 	StartMenu start_menu;
 	EndMenu end_menu;
 	std::unique_ptr<Game> game;
@@ -25,10 +27,7 @@ private:
 	void Render() const;
 
 public:
-	// TODO Consider making inline. SE SF.2
-	App() noexcept {
-		game = std::make_unique<Game>();
-	}
+	App();
 
 	void Run();
 };

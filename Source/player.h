@@ -42,7 +42,6 @@ public:
 
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
-		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	};
 
 	void Update() noexcept {

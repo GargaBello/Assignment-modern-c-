@@ -3,10 +3,18 @@
 #include <vector>
 #include <string>
 
-struct PlayerData
+class PlayerData
 {
+private:
 	std::string name{};
 	int score = 0;
+public:
+	int& GetScore() noexcept;
+	const int& GetScore() const noexcept;
+	std::string& GetName()  noexcept;
+	const std::string& GetName() const noexcept;
+
+	PlayerData(std::string name, int score) noexcept;
 };
 
 class LeaderBoard {
@@ -23,7 +31,7 @@ public:
 
 	bool CheckNewHighScore(int score) const noexcept;
 
-	void InsertNewHighScore(std::string name, int score) noexcept;
+	void InsertNewHighScore(std::string name, int score);
 
 	LeaderBoard() noexcept;
 

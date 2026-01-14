@@ -23,13 +23,10 @@ public:
 
 class Window {
 private:
-	// Todo: Make arguments to pass in
-	static constexpr int windowHeight = 1080;			
-	static constexpr int windowWidth = 1920;			
-	static constexpr std::string_view title = "Space invaders";		
+	
 public:
 
-	Window();
+	Window(int width, int height, std::string_view title);
 	~Window();
 
 	Window(const Window&) = delete;

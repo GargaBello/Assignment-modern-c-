@@ -3,7 +3,7 @@
 #include <vector>
 #include "gsl/algorithm"
 
-struct Star
+class Star
 {
 private:
 	Vector2 position = { gsl::narrow_cast<float>(GetRandomValue(-150, GetScreenWidth() + 150)) , gsl::narrow_cast<float>(GetRandomValue(0, GetScreenHeight())) };
@@ -15,11 +15,11 @@ public:
 	}
 };
 
-struct Background
+class Background
 {
 private:
 	std::vector<Star> Stars{};
-	int star_amount = 600;			// TODO should be static constexpr
+	static constexpr int star_amount = 600;
 
 public:
 

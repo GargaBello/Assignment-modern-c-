@@ -1,20 +1,7 @@
 #pragma once
 #include "raylib.h"
-#include <vector>
 #include <string_view>
-#include <string>
-#include <iostream>
-#include <exception>
-#include <ranges>
 
-/* TODO: Check if used, make loading part of construction
-* make destructor, check if rule of five is needed, 
-add error checks to see if everything loaded properly
-Maybe split textures into individual classes for easier managment
-Add the textures and files into the resource files in the project, as in the thing between source files and header files
-*/
-
-//TODO: we only need a single Texture type, if you pass the path to load into the constructor.
 class TextureHandler {
 private:
 	Texture2D texture{};
@@ -37,12 +24,12 @@ public:
 class Window {
 private:
 	// Todo: Make arguments to pass in
-	const int windowHeight = 1080;					// TODO Should just be static constexpr
-	const int windowWidth = 1920;					//
-	std::string_view title = "Space invaders";		//
+	static constexpr int windowHeight = 1080;			
+	static constexpr int windowWidth = 1920;			
+	static constexpr std::string_view title = "Space invaders";		
 public:
 
-	Window() noexcept;
+	Window();
 	~Window();
 
 	Window(const Window&) = delete;
@@ -68,18 +55,20 @@ public:
 	Drawer& operator=(const Drawer&&) = delete;
 };
 
-struct Resources
+class Resources
 {
+private:
 	TextureHandler shipTexture;
 	TextureHandler alienTexture;
 	TextureHandler barrierTexture;
 	TextureHandler laserTexture;
 
-	Resources() 
-		: alienTexture("./Assets/Alien.png")
-		, barrierTexture("./Assets/Barrier.png")
-		, laserTexture("./Assets/Laser.png")
-		, shipTexture("./Assets/Ship2.png")			// TODO Make sure order HERE matches variable declaration above... for clarity
-	{
-	}
+public:
+
+	Resources();
+
+	Texture2D GetShipTexture() const noexcept;
+	Texture2D GetAlienTexture() const noexcept;
+	Texture2D GetBarrierTexture() const noexcept;
+	Texture2D GetLaserTexture() const noexcept;
 };

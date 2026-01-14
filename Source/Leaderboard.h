@@ -1,48 +1,52 @@
 #pragma once
-
 #include "raylib.h"
-#include "playerScore.h"
-#include <string_view>
-#include <string>
 #include <vector>
-#include <algorithm>
-#include <ranges>
+#include <string>
 
 struct PlayerData
 {
 	std::string name{};
-	int score;
-
+	int score = 0;
 };
 
-struct LeaderBoard {
+class LeaderBoard {
 private:
 	std::vector<PlayerData> Leaderboard = { PlayerData("Player 1", 500), PlayerData("Player 2", 400), PlayerData("Player 3", 300), PlayerData("Player 4", 200), PlayerData("Player 5", 100), };
-	
+	bool newHighScore = false;
 public:
 
-	bool newHighScore = false;
+	void SetNewHighScore(bool condition) noexcept;
+
+	bool GetNewHighScore() noexcept;
+
+	const bool GetNewHighScore() const noexcept;
 
 	bool CheckNewHighScore(int score) const noexcept;
 
 	void InsertNewHighScore(std::string name, int score) noexcept;
 
-	LeaderBoard() {
-		if (CheckNewHighScore(playerScore.score)) {
-			newHighScore = true;
-		}
-	}
+	LeaderBoard() noexcept;
 
-	std::vector<PlayerData> GetLeaderboard() const noexcept;
+	const std::vector<PlayerData> GetLeaderboard() const noexcept;
 };
 
-struct TextBox {
+class TextBox {
+private:
 	std::string name{};
 
-	Rectangle textBox = { 600, 500, 225, 50 };
+	static constexpr Rectangle textBox = { 600, 500, 225, 50 };
 	bool mouseOnText = false;
 
-	int framesCounter = 0;
+public:
+
+	std::string& GetName() noexcept;
+	const std::string& GetName() const noexcept;
+
+	bool& GetMouseOnText() noexcept;
+	const bool& GetMouseOnText() const noexcept;
+	void SetMouseOnText(bool condition) noexcept;
+
+	const Rectangle& GetRect() const noexcept;
 
 	TextBox() = default;
 };

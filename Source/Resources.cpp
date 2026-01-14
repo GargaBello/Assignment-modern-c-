@@ -1,4 +1,6 @@
 #include "Resources.h"
+#include <iostream>
+#include <exception>
 
 TextureHandler::TextureHandler(std::string_view path) :
 	texture(LoadTexture(path.data()))
@@ -16,11 +18,7 @@ Texture2D TextureHandler::GetTexture() const noexcept{
 	return texture;
 }
 
-//TODO: A RAII type only ever handles ONE resource. 
-//TODO: then you build containers / sets / aggregates / collections out of those RAII handles. 
-
-
-Window::Window() noexcept
+Window::Window()
 {
 	SetConfigFlags(FLAG_FULLSCREEN_MODE);
 	InitWindow(0, 0, title.data());
@@ -43,4 +41,32 @@ Drawer::Drawer()
 Drawer::~Drawer()
 {
 	EndDrawing();
+}
+
+Resources::Resources()
+	: shipTexture("./Assets/Ship2.png")
+	, alienTexture("./Assets/Alien.png")
+	, barrierTexture("./Assets/Barrier.png")
+	, laserTexture("./Assets/Laser.png")
+{
+}
+
+Texture2D Resources::GetShipTexture() const noexcept
+{
+	return shipTexture.GetTexture();
+}
+
+Texture2D Resources::GetAlienTexture() const noexcept
+{
+	return alienTexture.GetTexture();
+}
+
+Texture2D Resources::GetBarrierTexture() const noexcept
+{
+	return barrierTexture.GetTexture();
+}
+
+Texture2D Resources::GetLaserTexture() const noexcept
+{
+	return laserTexture.GetTexture();
 }

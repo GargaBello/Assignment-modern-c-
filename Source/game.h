@@ -1,33 +1,22 @@
 #pragma once
-#include "raylib.h"
 #include "Resources.h"
 #include "player.h"
 #include "alien.h"
 #include "walls.h"
 #include "background.h"
 #include "Projectiles.h"
-#include "Leaderboard.h"
-#include "playerScore.h"
 #include <vector>
-#include <string>
-#include <ranges>
-#include <algorithm>
-#include <print>
-#include <random>
 
-struct Game
+class Game
 {
+private:
 	float shootTimer = 0;
 
-	void Update();
-	void Render() const noexcept;
-
-	Resources resources; //consider using RAII and just giving each type their own Resource handle. No reason to store those assets here in game. 
+	Resources resources;
 
 	Player player;
-	PlayerData leaderboardData;
 
-	std::vector<EnemyProjectile> enemyProjectiles{}; 
+	std::vector<EnemyProjectile> enemyProjectiles{};
 	std::vector<PlayerProjectile> playerProjectiles{};
 
 	Walls walls = Walls();
@@ -36,5 +25,15 @@ struct Game
 
 	Aliens aliens;
 
-	
+	void PlayerShoot() noexcept;
+	void AliensShoot();
+	void PlayerProjectileCollisionCheck() noexcept;
+	void EnemyProjectileCollisionCheck() noexcept;
+	void EraseInactiveProjectiles() noexcept;
+public:
+
+	int& GetPlayerLives() noexcept;
+
+	void Update();
+	void Render() const noexcept;
 };

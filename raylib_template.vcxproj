@@ -24,6 +24,7 @@
     <ProjectGuid>{145d8a9a-09e5-47f5-b2ec-58a8985ca5a8}</ProjectGuid>
     <RootNamespace>raylibtemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Space Invaders</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -134,7 +135,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -171,23 +172,21 @@
     <ClCompile Include="Source\end_menu.cpp" />
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\Leaderboard.cpp" />
-    <ClCompile Include="Source\level.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\PlayerScore.cpp" />
     <ClCompile Include="Source\Resources.cpp" />
     <ClCompile Include="Source\start_menu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Projectiles.h" />
     <ClInclude Include="Source\alien.h" />
     <ClInclude Include="Source\app.h" />
     <ClInclude Include="Source\background.h" />
     <ClInclude Include="Source\end_menu.h" />
     <ClInclude Include="Source\game.h" />
     <ClInclude Include="Source\Leaderboard.h" />
-    <ClInclude Include="Source\level.h" />
     <ClInclude Include="Source\player.h" />
     <ClInclude Include="Source\playerScore.h" />
+    <ClInclude Include="Source\Projectiles.h" />
     <ClInclude Include="Source\Resources.h" />
     <ClInclude Include="Source\start_menu.h" />
     <ClInclude Include="Source\walls.h" />

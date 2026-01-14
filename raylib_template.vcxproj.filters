@@ -30,9 +30,6 @@
     <ClCompile Include="Source\Leaderboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\level.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\start_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,12 +59,6 @@
     <ClInclude Include="Source\Leaderboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\level.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectiles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\alien.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\playerScore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Projectiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

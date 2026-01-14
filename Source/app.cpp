@@ -1,12 +1,13 @@
 #include "app.h"
+#include "playerScore.h"
 
 void App::RestartGame()
 {
 	game = std::make_unique<Game>();
-	playerScore.score = 0;
+	playerScore.ResetScore();
 }
 
-void App::Render() {
+void App::Render() const {
 	Drawer drawer;
 	switch (state)
 	{
@@ -29,23 +30,23 @@ void App::Update() {
 	{
 	case App::gameState::Start:
 		start_menu.Update();
-		if (start_menu.start_game == true) {
-			start_menu.start_game = false;
+		if (start_menu.GetStartGame()) {
+			start_menu.SetStarGame(false);
 			state = gameState::Ingame;
 			
 		}
 		break;
 	case App::gameState::Ingame:
 		game.get()->Update();
-		if (game.get()->player.lives <= 0) {
+		if (game.get()->GetPlayerLives() <= 0) {
 			state = gameState::End;
-			end_menu.Leaderboard = LeaderBoard();
+			end_menu.ResetLeaderBoard(LeaderBoard());
 		}
 		break;
 	case App::gameState::End:
 		end_menu.Update();
-		if (end_menu.restartGame == true) {
-			end_menu.restartGame = false;
+		if (end_menu.GetRestartGame()) {
+			end_menu.SetRestartGame(false);
 			state = gameState::Ingame;
 			RestartGame();
 		}

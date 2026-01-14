@@ -1,20 +1,19 @@
 #pragma once
 #include "raylib.h"
 #include <vector>
-#include <random>
-#include "Resources.h"
+#include <algorithm>
+#include <ranges>
 
 struct Alien
 {
 private:
 	Vector2 position{};
-	float radius = 100.0f;								// TODO Should be static constexpr
+	static constexpr float radius = 100.0f;								
 	bool active = true;
 	int speed = 2;
 	static constexpr int player_spawn_offset = 200;
 
 	Rectangle rect = {};
-
 public:
 
 	explicit Alien(Vector2 pos) noexcept
@@ -46,15 +45,9 @@ public:
 	void Update() noexcept {
 		position.x += speed;
 
-		if (position.x >= GetScreenWidth()) // Combine with else{} below
+		if (position.x >= GetScreenWidth() || position.x <= 0) // Combine with else{} below
 		{
 			speed *= -1;					// TODO This
-			position.y += 50;
-			rect.y = position.y;
-		}
-		else if (position.x <= 0)
-		{
-			speed = 2;
 			position.y += 50;
 			rect.y = position.y;
 		}
@@ -71,12 +64,11 @@ struct Aliens {
 private:
 	std::vector<Alien> aliens{};
 
-	// TODO Make static constexpr
-	int formationWidth = 8;
-	int formationHeight = 5;
-	float alienSpacing = 80;
-	float formationX = 100;
-	float formationY = 50;
+	static constexpr int formationWidth = 8;
+	static constexpr int formationHeight = 5;
+	static constexpr float alienSpacing = 80;
+	static constexpr float formationX = 100;
+	static constexpr float formationY = 50;
 public:
 
 	std::vector<Alien>& GetVector() noexcept {
@@ -88,15 +80,9 @@ public:
 	}
 
 	void RemoveInactive() noexcept {
-		std::erase_if(aliens, [](const Alien& alien) {return !alien.GetActive(); });
+		std::erase_if(aliens, [](const Alien& alien) noexcept {return !alien.GetActive(); });
 	}
 
-	template <typename T>	// TODO Move to cpp file unless another file actually needs it... and if so, make it a sepparate file (it's unrelated to Aliens)
-	T& GetRandomElement(std::vector<T>& v, std::mt19937& rng) {
-		if (v.empty()) throw std::runtime_error("Cannot get random element from empty vector");
-		std::uniform_int_distribution<std::size_t> dist(0, v.size() - 1);
-		return v[dist(rng)];
-	}
 
 	Aliens() noexcept { // TODO: use other algo than iota
 		for (const int& row : std::views::iota(0, formationHeight)) {

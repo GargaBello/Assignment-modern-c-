@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "gsl/algorithm"
+#include "Resources.h"
 
 struct Player {
 
@@ -17,7 +18,7 @@ struct Player {
 	void Render(Texture2D texture) const noexcept {
 		DrawTextureV(texture, position, WHITE);
 		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
-	}; //TODO: render should always be const
+	}; 
 
 	void Update() noexcept {
 		if (IsKeyDown(KEY_LEFT))

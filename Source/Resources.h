@@ -24,7 +24,7 @@ public:
 	TextureHandler(std::string_view path);
 	~TextureHandler();
 
-	Texture2D GetTexture();
+	Texture2D GetTexture() const noexcept;
 
 	TextureHandler(const TextureHandler&) = delete;
 	TextureHandler& operator=(const TextureHandler&) = delete;
@@ -50,22 +50,6 @@ public:
 
 	Window(const Window&&) = delete;
 	Window& operator=(const Window&&) = delete;
-};
-
-class AudioDevice {
-private:
-	Sound sound{};
-public:
-
-	AudioDevice(auto sound);
-
-	~AudioDevice();
-
-	AudioDevice(const AudioDevice&) = delete;
-	AudioDevice& operator=(const AudioDevice&) = delete;
-
-	AudioDevice(const AudioDevice&&) = delete;
-	AudioDevice& operator=(const AudioDevice&&) = delete;
 };
 
 class Drawer {

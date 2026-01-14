@@ -15,16 +15,12 @@
 
 struct Game
 {
-	// Score
-	int score = 0;
-
-	//Aliens shooting
 	float shootTimer = 0;
 
 	void End();
 
 	void Update();
-	void Render();
+	void Render() const noexcept;
 
 	//TODO: raylib has a rectangle interfection test. use it. Replace all custom collision logic with the library function, and make all entities adhere to the simple
 	// Rectangle getCollisionBox() const noexcept interface. 
@@ -36,8 +32,6 @@ struct Game
 
 	std::vector<EnemyProjectile> enemyProjectiles{}; 
 	std::vector<PlayerProjectile> playerProjectiles{};
-
-	//Wall wall;
 
 	Walls walls = Walls();
 

@@ -102,10 +102,8 @@ void Game::Update()
 
 		if (IsKeyPressed(KEY_SPACE))
 		{
-			float window_height = static_cast<float>(GetScreenHeight()); // TODO: use narrow cast instead
-			Vector2 projPos = { player.position.x, window_height - 130};
-			PlayerProjectile newProjectile(projPos);
-			playerProjectiles.push_back(newProjectile);
+			static constexpr int bottom_offset = 240;
+			playerProjectiles.emplace_back(Vector2{ player.position.x, gsl::narrow_cast<float>(GetScreenHeight() - bottom_offset) });
 		}
 
 		shootTimer += 1;
@@ -129,26 +127,18 @@ void Game::Update()
 
 		std::erase_if(playerProjectiles, [](const auto& projectile) { return !projectile.active; });
 		std::erase_if(enemyProjectiles, [](const auto& projectile) { return !projectile.active; });
-
 		std::erase_if(aliens.aliens, [](const auto& alien) { return !alien.active; });
-
 		std::erase_if(walls.walls_vec, [](const auto& wall) { return !wall.active; });
 }
 
-/* TODO: Move the draw functions built into raylib here
-* Make for loop into ranged for loop
-* Probably change something with the textbox in leaderboard, ill get to it eventually
-*/
-
-void Game::Render()
+void Game::Render() const noexcept
 {
 	background.Render();
 	
-	DrawText(TextFormat("Score: %i", score), 50, 20, 40, YELLOW);
+	DrawText(TextFormat("Score: %i", leaderboardData.score), 50, 20, 40, YELLOW);
 	DrawText(TextFormat("Lives: %i", player.lives), 50, 70, 40, YELLOW);
 	
 	player.Render(resources.shipTexture.GetTexture());
-	//wall.Render(resources.barrierTexture.GetTexture());
 	
 	for (auto& projectile : playerProjectiles)
 	{

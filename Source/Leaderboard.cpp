@@ -7,7 +7,7 @@ bool LeaderBoard::CheckNewHighScore(int score) const noexcept {
 void LeaderBoard::InsertNewHighScore(std::string name, int score) {
 	PlayerData newData;
 	Leaderboard.push_back(newData);
-	//std::ranges::sort(Leaderboard, {}, &PlayerData::score); // check if this is right
+	std::ranges::sort(Leaderboard, std::ranges::greater{}, &PlayerData::score);
 	Leaderboard.pop_back();
 	
 	//consider: 
@@ -20,12 +20,3 @@ std::vector<PlayerData> LeaderBoard::GetLeaderboard()
 {
 	return Leaderboard;
 }
-
-
-
-//PlayerData::PlayerData(std::string name)
-//	: name(name)
-//{
-//}
-
-

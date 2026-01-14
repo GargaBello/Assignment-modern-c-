@@ -1,5 +1,10 @@
 #include "app.h"
 
+void App::RestartGame()
+{
+	game = std::make_unique<Game>();
+}
+
 void App::Render() {
 	Drawer drawer;
 	switch (state)
@@ -8,7 +13,7 @@ void App::Render() {
 		start_menu.Render();
 		break;
 	case App::gameState::Ingame:
-		game.Render();
+		game.get()->Render();
 		break;
 	case App::gameState::End:
 		end_menu.Render();
@@ -30,8 +35,8 @@ void App::Update() {
 		}
 		break;
 	case App::gameState::Ingame:
-		game.Update();
-		if (game.player.lives <= 0) {
+		game.get()->Update();
+		if (game.get()->player.lives <= 0) {
 			state = gameState::End;
 		}
 		break;
@@ -40,6 +45,7 @@ void App::Update() {
 		if (end_menu.restartGame == true) {
 			end_menu.restartGame = false;
 			state = gameState::Ingame;
+			RestartGame();
 		}
 		break;
 	default:

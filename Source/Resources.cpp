@@ -1,16 +1,5 @@
 #include "Resources.h"
 
-
-/* Todo: Initialize in constructor, check if multiple ship textures are used
-* Check how the textures are unloaded and add to destructor
-*/
-
-
-/* TODO: Maybe make error handling a free function performed after construction or 
-make constructor take a argument to not make it a default constructor
-*/
-
-
 TextureHandler::TextureHandler(std::string_view path) :
 	texture(LoadTexture(path.data()))
 {
@@ -23,7 +12,7 @@ TextureHandler::~TextureHandler() {
 	UnloadTexture(texture);
 }
 
-Texture2D TextureHandler::GetTexture() {
+Texture2D TextureHandler::GetTexture() const noexcept{
 	return texture;
 }
 
@@ -33,29 +22,13 @@ Texture2D TextureHandler::GetTexture() {
 
 Window::Window() noexcept
 {
-	SetConfigFlags(FLAG_FULLSCREEN_MODE);
+	SetConfigFlags(FLAG_BORDERLESS_WINDOWED_MODE);
 	InitWindow(0, 0, title.data());
 }
 
 Window::~Window()
 {
 	CloseWindow();
-}
-
-AudioDevice::AudioDevice(auto sound)
-{
-	InitAudioDevice();
-	this->sound = LoadSound(sound);
-
-	if (!IsSoundReady(this->sound)) {
-		throw std::runtime_error("Failed to load sound :" + std::to_string(sound));
-	}
-
-}
-
-AudioDevice::~AudioDevice()
-{
-	CloseAudioDevice();
 }
 
 Drawer::Drawer() 

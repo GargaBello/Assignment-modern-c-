@@ -16,8 +16,6 @@ struct Wall
 		DrawRectangleLinesEx(rect, 5, DARKPURPLE);
 	}
 
-	
-
 	void Update() noexcept {
 		if (health < 1)
 		{
@@ -39,12 +37,10 @@ struct Walls
 	Walls() noexcept {
 		 const float window_width = gsl::narrow_cast<float>(GetScreenWidth());
 		 const float window_height = gsl::narrow_cast<float>(GetScreenHeight());
-		 const float wall_distance = window_width / (wallCount);
+		 const float wall_distance = window_width / wallCount;
 		 
 		 for (int i : std::views::iota(0, wallCount)) {
-			 const float x = wall_distance * (i + 1);
-			 const float y = window_height - wall_y_offset;
-			 walls_vec.emplace_back(Vector2{x, y});
+			 walls_vec.emplace_back(Vector2{ wall_distance * i, window_height - wall_y_offset });
 		 }
 	}
 };

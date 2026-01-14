@@ -11,7 +11,8 @@ struct App {
 	Window window;
 	StartMenu start_menu;
 	EndMenu end_menu;
-	Game game;
+	//Game game;
+	std::unique_ptr<Game> game;
 	LeaderBoard leaderboard;
 	PlayerData leaderboardData;
 	
@@ -24,9 +25,13 @@ struct App {
 
 	gameState state = gameState::Start;
 
+	void RestartGame();
+
 	void Update();
 	void Render();
 	void Run();
 
-	App() = default;
+	App() {
+		game = std::make_unique<Game>();
+	}
 };

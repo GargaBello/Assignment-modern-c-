@@ -4,7 +4,7 @@
 #include "end_menu.h"
 
 
-class App {	// TODO Make this, and all non-simple structs, into class (look up guidelines for why) C.2
+class App {
 private:
 	static constexpr int windowHeight = 1080, windowWidth = 1920;
 	static constexpr std::string_view title = "Space Invaders";
